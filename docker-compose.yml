@@ -1,15 +1,43 @@
-version: '3.1'
+version: '3'
 services:
-  stats-server:
-    ports:
-      - "9090:9090"
-
-  stats-db:
-    image: postgres:14-alpine
-
-  ewm-service:
+  main-service:
+    build:
+      context: ./main-service
     ports:
       - "8080:8080"
+    depends_on:
+      - main-database
 
-  ewm-db:
-    image: postgres:14-alpine
+  http-server:
+    build:
+      context: ./statistics-service/http-server
+    ports:
+      - "8081:8081"
+    depends_on:
+      - statistics-database
+
+  http-client:
+    build:
+      context: ./statistics-service/http-client
+    ports:
+      - "8082:8082"
+    depends_on:
+      - http-server
+
+  main-database:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: mainservice_db
+      POSTGRES_USER: mainservice_user
+      POSTGRES_PASSWORD: mainservice_password
+    ports:
+      - "5433:5432"
+
+  statistics-database:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: statistics_db
+      POSTGRES_USER: statistics_user
+      POSTGRES_PASSWORD: statistics_password
+    ports:
+      - "5434:5432"
