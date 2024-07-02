@@ -1,9 +1,4 @@
-FROM openjdk:11-jdk-slim
-
-WORKDIR /app
-
-COPY target/http-server-0.0.1-SNAPSHOT.jar /app/http-server.jar
-
-EXPOSE 8081
-
-ENTRYPOINT ["java", "-jar", "/app/http-server.jar"]
+FROM openjdk:11-jre-slim
+VOLUME /tmp
+COPY target/http-server-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]

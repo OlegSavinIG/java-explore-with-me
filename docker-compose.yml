@@ -1,43 +1,58 @@
-version: '3'
+version: '3.8'
+
 services:
-  main-service:
-    build:
-      context: ./main-service
-    ports:
-      - "8080:8080"
-    depends_on:
-      - main-database
-
-  http-server:
-    build:
-      context: ./statistics-service/http-server
-    ports:
-      - "8081:8081"
-    depends_on:
-      - statistics-database
-
-  http-client:
-    build:
-      context: ./statistics-service/http-client
-    ports:
-      - "8082:8082"
-    depends_on:
-      - http-server
-
-  main-database:
-    image: postgres:latest
+  postgres-main:
+    container_name: db-main
+    image: postgres:13
     environment:
-      POSTGRES_DB: mainservice_db
-      POSTGRES_USER: mainservice_user
-      POSTGRES_PASSWORD: mainservice_password
+      POSTGRES_DB: main_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-main-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  postgres-stat:
+    container_name: db-stats
+    image: postgres:13
+    environment:
+      POSTGRES_DB: stat_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-stat-data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
 
-  statistics-database:
-    image: postgres:latest
+  main-service:
+    container_name: main-service
+    build:
+      context: ./main-service
+      dockerfile: Dockerfile
     environment:
-      POSTGRES_DB: statistics_db
-      POSTGRES_USER: statistics_user
-      POSTGRES_PASSWORD: statistics_password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-main:5432/main_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - postgres-main
     ports:
-      - "5434:5432"
+      - "8080:8080"
+
+  http-server:
+    container_name: http-server
+    build:
+      context: ./statistics-service/http-server
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stat:5432/stat_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - postgres-stat
+    ports:
+      - "8081:8080"
+
+volumes:
+  postgres-main-data:
+  postgres-stat-data:
