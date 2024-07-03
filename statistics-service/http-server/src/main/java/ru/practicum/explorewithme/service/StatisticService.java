@@ -1,6 +1,5 @@
 package ru.practicum.explorewithme.service;
 
-import org.springframework.http.ResponseEntity;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 

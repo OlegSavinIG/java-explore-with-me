@@ -7,4 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EWMStatisticServiceApp {
     public static void main(String[] args) {
         SpringApplication.run(EWMStatisticServiceApp.class, args);
-    }}
+    }
+}

@@ -2,7 +2,6 @@ package ru.practicum.explorewithme;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
@@ -18,9 +17,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatisticClient {
 
-private final WebClient webClient;
+    private final WebClient webClient;
+
     public Mono<StatisticResponse> saveStatistic(StatisticRequest request) {
-       return webClient.post()
+        return webClient.post()
                 .uri("/hit")
                 .bodyValue(request)
                 .retrieve()

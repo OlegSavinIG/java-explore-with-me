@@ -2,7 +2,6 @@ package ru.practicum.explorewithme;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -22,7 +21,7 @@ public class StatisticController {
 
     @PostMapping("/hit")
     public Mono<StatisticResponse> saveStatistic(@Valid @RequestBody StatisticRequest request) {
-       return client.saveStatistic(request);
+        return client.saveStatistic(request);
     }
 
     @GetMapping("/stats")
