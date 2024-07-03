@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme;
+package ru.practicum.explorewithme.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -6,6 +6,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.practicum.explorewithme.StatisticRequest;
+import ru.practicum.explorewithme.StatisticResponse;
+import ru.practicum.explorewithme.client.StatisticClient;
 import ru.practicum.explorewithme.exception.WrongTimeException;
 
 import javax.validation.Valid;
