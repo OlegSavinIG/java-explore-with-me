@@ -3,13 +3,18 @@ package ru.practicum.explorewithme.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 import ru.practicum.explorewithme.client.StatisticClient;
 import ru.practicum.explorewithme.exception.WrongTimeException;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -52,15 +57,11 @@ public class StatisticController {
     @GetMapping("/stats")
     public Flux<StatisticResponse> getStatistic(
             @NotNull @RequestParam("start")
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-            final LocalDateTime start,
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final LocalDateTime start,
             @NotNull @RequestParam("end")
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-            final LocalDateTime end,
-            @RequestParam(value = "uris", required = false)
-            final List<String> uris,
-            @RequestParam(value = "unique", defaultValue = "false")
-            final boolean unique) {
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final LocalDateTime end,
+            @RequestParam(value = "uris", required = false) final List<String> uris,
+            @RequestParam(value = "unique", defaultValue = "false") final boolean unique) {
         if (!start.isBefore(end)) {
             throw new WrongTimeException(
                     "Начало эвента должно быть раньше конца");

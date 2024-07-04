@@ -18,6 +18,7 @@ import java.time.Duration;
 public class WebClientConfig {
     /**
      * Time for response
+     * @param responseTime time
      */
    private final int responseTime = 5;
     /**
