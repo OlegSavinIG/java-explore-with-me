@@ -23,6 +23,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "statistic")
 public class StatisticEntity {
+    /**
+     * The id.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -9,8 +9,12 @@ import ru.practicum.explorewithme.StatisticResponse;
 /**
  * Mapper class for converting between StatisticEntity and DTOs.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+//@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatisticMapper {
+    private StatisticMapper() {
+        throw new UnsupportedOperationException("This is a utility "
+                + "class and cannot be instantiated");
+    }
 
     /**
      * Converts a StatisticRequest to a StatisticEntity.
