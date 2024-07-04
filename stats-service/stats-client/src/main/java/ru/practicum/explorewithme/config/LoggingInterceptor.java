@@ -24,15 +24,27 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
         return response;
     }
 
-    private void logRequestDetails(final HttpRequest request,
-                                   final byte[] body) throws IOException {
+    /**
+     * Logs the details of the HTTP request.
+     *
+     * @param request the HTTP request
+     * @param body the body of the request
+     * @throws IOException if an I/O error occurs
+     */
+    private void logRequestDetails(
+            final HttpRequest request, final byte[] body) throws IOException {
         System.out.println("URI: " + request.getURI());
         System.out.println("Method: " + request.getMethod());
         System.out.println("Headers: " + request.getHeaders());
-        System.out.println("Request body: "
-                + new String(body, StandardCharsets.UTF_8));
+        System.out.println("Request body: " + new String(body, StandardCharsets.UTF_8));
     }
 
+    /**
+     * Logs the details of the HTTP response.
+     *
+     * @param response the HTTP response
+     * @throws IOException if an I/O error occurs
+     */
     private void logResponseDetails(
             final ClientHttpResponse response) throws IOException {
         System.out.println("Status code: " + response.getStatusCode());

@@ -19,6 +19,12 @@ public class CustomResponseErrorHandler implements ResponseErrorHandler {
         return response.getStatusCode().isError();
     }
 
+    /**
+     * Handles the error from the response.
+     *
+     * @param response the client HTTP response
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     public void handleError(
             final ClientHttpResponse response) throws IOException {

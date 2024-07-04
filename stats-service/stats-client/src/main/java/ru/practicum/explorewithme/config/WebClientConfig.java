@@ -17,10 +17,17 @@ import java.time.Duration;
 @Configuration
 public class WebClientConfig {
 
+    /**
+     * Configures the WebClient bean.
+     *
+     * @param builder the WebClient.Builder
+     * @param serverUrl the base URL for the server
+     * @return the configured WebClient
+     */
     @Bean
-    public WebClient webClient(
-            final WebClient.Builder builder,
-            @Value("${server.url}") final String serverUrl) {
+    public WebClient webClient(final WebClient.Builder builder,
+                               @Value("${server.url}")
+                               final String serverUrl) {
         return builder
                 .baseUrl(serverUrl)
                 .defaultHeader("Content-Type", "application/json")
@@ -31,6 +38,11 @@ public class WebClientConfig {
                 .build();
     }
 
+    /**
+     * Logs the details of the WebClient request.
+     *
+     * @return the ExchangeFilterFunction for logging requests
+     */
     private ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
             System.out.println("Request: " + clientRequest.method() + " " + clientRequest.url());
@@ -41,6 +53,11 @@ public class WebClientConfig {
         });
     }
 
+    /**
+     * Logs the details of the WebClient response.
+     *
+     * @return the ExchangeFilterFunction for logging responses
+     */
     private ExchangeFilterFunction logResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
             System.out.println("Response Status: " + clientResponse.statusCode());
