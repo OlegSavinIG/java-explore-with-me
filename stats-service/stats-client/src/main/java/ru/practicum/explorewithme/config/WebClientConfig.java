@@ -20,20 +20,20 @@ public class WebClientConfig {
     /**
      * Configures the WebClient bean.
      *
-     * @param builder the WebClient.Builder
+     * @param builder   the WebClient.Builder
      * @param serverUrl the base URL for the server
      * @return the configured WebClient
      */
     @Bean
     public WebClient webClient(final WebClient.Builder builder,
-                               @Value("${server.url}")
-                               final String serverUrl) {
+                               @Value("${server.url}") final String serverUrl) {
+        int responseTime = 5;
         return builder
                 .baseUrl(serverUrl)
                 .defaultHeader("Content-Type", "application/json")
                 .clientConnector(
                         new ReactorClientHttpConnector(HttpClient.create()
-                        .responseTimeout(Duration.ofSeconds(5))))
+                                .responseTimeout(Duration.ofSeconds(responseTime))))
                 .filter(logRequest())
                 .filter(logResponse())
                 .build();
@@ -47,13 +47,14 @@ public class WebClientConfig {
     private ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(
                 clientRequest -> {
-            System.out.println(
-                    "Request: " + clientRequest.method() + " " + clientRequest.url());
-            clientRequest.headers().forEach(
-                    (name, values) -> values.forEach(
-                            value -> System.out.println(name + ": " + value)));
-            return Mono.just(clientRequest);
-        });
+                    System.out.println(
+                            "Request: " + clientRequest.method()
+                                    + " " + clientRequest.url());
+                    clientRequest.headers().forEach(
+                            (name, values) -> values.forEach(
+                                    value -> System.out.println(name + ": " + value)));
+                    return Mono.just(clientRequest);
+                });
     }
 
     /**
@@ -64,12 +65,12 @@ public class WebClientConfig {
     private ExchangeFilterFunction logResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(
                 clientResponse -> {
-            System.out.println(
-                    "Response Status: " + clientResponse.statusCode());
-            clientResponse.headers().asHttpHeaders().forEach(
-                    (name, values) -> values.forEach(
-                            value -> System.out.println(name + ": " + value)));
-            return Mono.just(clientResponse);
-        });
+                    System.out.println(
+                            "Response Status: " + clientResponse.statusCode());
+                    clientResponse.headers().asHttpHeaders().forEach(
+                            (name, values) -> values.forEach(
+                                    value -> System.out.println(name + ": " + value)));
+                    return Mono.just(clientResponse);
+                });
     }
 }

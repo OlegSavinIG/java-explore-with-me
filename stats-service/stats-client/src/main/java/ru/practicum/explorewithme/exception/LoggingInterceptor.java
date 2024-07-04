@@ -29,7 +29,7 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
      * Logs the details of the HTTP request.
      *
      * @param request the HTTP request
-     * @param body the body of the request
+     * @param body    the body of the request
      * @throws IOException if an I/O error occurs
      */
     private void logRequestDetails(

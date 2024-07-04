@@ -42,9 +42,9 @@ public class StatisticClient {
     /**
      * Retrieves statistics.
      *
-     * @param start the start date and time
-     * @param end the end date and time
-     * @param uris the list of URIs
+     * @param start  the start date and time
+     * @param end    the end date and time
+     * @param uris   the list of URIs
      * @param unique whether to count only unique hits
      * @return a Flux containing the statistics
      */
@@ -62,9 +62,9 @@ public class StatisticClient {
 
         UriComponentsBuilder builder =
                 UriComponentsBuilder.fromHttpUrl("/stats")
-                .queryParam("start", startTime)
-                .queryParam("end", endTime)
-                .queryParam("unique", unique);
+                        .queryParam("start", startTime)
+                        .queryParam("end", endTime)
+                        .queryParam("unique", unique);
 
         if (uris != null && !uris.isEmpty()) {
             for (String uri : uris) {

@@ -2,9 +2,6 @@ package ru.practicum.explorewithme.exception;
 
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
-import ru.practicum.explorewithme.exception.CustomBadRequestException;
-import ru.practicum.explorewithme.exception.CustomGenericException;
-import ru.practicum.explorewithme.exception.CustomNotFoundException;
 
 import java.io.IOException;
 
