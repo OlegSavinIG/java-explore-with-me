@@ -30,8 +30,8 @@ public class StatisticClient {
      * @param request the request containing the statistic data
      * @return the response containing the saved statistic data
      */
-    public Mono<StatisticResponse> saveStatistic
-    (final StatisticRequest request) {
+    public Mono<StatisticResponse> saveStatistic(
+            final StatisticRequest request) {
         return webClient.post()
                 .uri("/hit")
                 .bodyValue(request)
@@ -42,23 +42,26 @@ public class StatisticClient {
     /**
      * Retrieves statistics.
      *
-     * @param start the start date and time
-     * @param end the end date and time
-     * @param uris the list of URIs
+     * @param start  the start date and time
+     * @param end    the end date and time
+     * @param uris   the list of URIs
      * @param unique whether to count only unique hits
      * @return a Flux containing the statistics
      */
-    public Flux<StatisticResponse> getStatistic
-    (final LocalDateTime start, final LocalDateTime end,
-                                                final List<String> uris, final boolean unique) {
+    public Flux<StatisticResponse> getStatistic(
+            final LocalDateTime start, final LocalDateTime end,
+     final List<String> uris, final boolean unique) {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String startTime =
-                URLEncoder.encode(start.format(formatter), StandardCharsets.UTF_8);
+                URLEncoder.encode(
+                        start.format(formatter), StandardCharsets.UTF_8);
         String endTime =
-                URLEncoder.encode(end.format(formatter), StandardCharsets.UTF_8);
+                URLEncoder.encode(
+                        end.format(formatter), StandardCharsets.UTF_8);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("/stats")
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl("/stats")
                 .queryParam("start", startTime)
                 .queryParam("end", endTime)
                 .queryParam("unique", unique);
