@@ -25,10 +25,10 @@ services:
     ports:
       - "5433:5432"
 
-  main-service:
-    container_name: main-service
+  ewm-service:
+    container_name: ewm-service
     build:
-      context: ./main-service
+      context: ./ewm-service
       dockerfile: Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-main:5432/main_db
