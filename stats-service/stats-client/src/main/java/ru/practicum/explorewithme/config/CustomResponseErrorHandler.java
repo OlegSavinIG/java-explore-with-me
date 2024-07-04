@@ -8,15 +8,18 @@ import ru.practicum.explorewithme.exception.CustomNotFoundException;
 
 import java.io.IOException;
 
+/**
+ * Custom error handler for REST responses.
+ */
 public class CustomResponseErrorHandler implements ResponseErrorHandler {
 
     @Override
-    public boolean hasError(ClientHttpResponse response) throws IOException {
+    public boolean hasError(final ClientHttpResponse response) throws IOException {
         return response.getStatusCode().isError();
     }
 
     @Override
-    public void handleError(ClientHttpResponse response) throws IOException {
+    public void handleError(final ClientHttpResponse response) throws IOException {
         System.out.println("Error status code: " + response.getStatusCode());
         System.out.println("Error status text: " + response.getStatusText());
 

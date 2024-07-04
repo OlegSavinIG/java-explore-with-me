@@ -11,10 +11,14 @@ import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
 
+/**
+ * Configuration for WebClient.
+ */
 @Configuration
 public class WebClientConfig {
+
     @Bean
-    public WebClient webClient(WebClient.Builder builder, @Value("${server.url}") String serverUrl) {
+    public WebClient webClient(final WebClient.Builder builder, @Value("${server.url}") final String serverUrl) {
         return builder
                 .baseUrl(serverUrl)
                 .defaultHeader("Content-Type", "application/json")
