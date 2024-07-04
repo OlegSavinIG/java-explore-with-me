@@ -31,7 +31,8 @@ public class WebClientConfig {
         return builder
                 .baseUrl(serverUrl)
                 .defaultHeader("Content-Type", "application/json")
-                .clientConnector(new ReactorClientHttpConnector(HttpClient.create()
+                .clientConnector(
+                        new ReactorClientHttpConnector(HttpClient.create()
                         .responseTimeout(Duration.ofSeconds(5))))
                 .filter(logRequest())
                 .filter(logResponse())
@@ -44,8 +45,10 @@ public class WebClientConfig {
      * @return the ExchangeFilterFunction for logging requests
      */
     private ExchangeFilterFunction logRequest() {
-        return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
-            System.out.println("Request: " + clientRequest.method() + " " + clientRequest.url());
+        return ExchangeFilterFunction.ofRequestProcessor(
+                clientRequest -> {
+            System.out.println(
+                    "Request: " + clientRequest.method() + " " + clientRequest.url());
             clientRequest.headers().forEach(
                     (name, values) -> values.forEach(
                             value -> System.out.println(name + ": " + value)));
@@ -59,8 +62,10 @@ public class WebClientConfig {
      * @return the ExchangeFilterFunction for logging responses
      */
     private ExchangeFilterFunction logResponse() {
-        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-            System.out.println("Response Status: " + clientResponse.statusCode());
+        return ExchangeFilterFunction.ofResponseProcessor(
+                clientResponse -> {
+            System.out.println(
+                    "Response Status: " + clientResponse.statusCode());
             clientResponse.headers().asHttpHeaders().forEach(
                     (name, values) -> values.forEach(
                             value -> System.out.println(name + ": " + value)));

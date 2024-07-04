@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.config;
+package ru.practicum.explorewithme.exception;
 
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -14,9 +14,10 @@ import java.nio.charset.StandardCharsets;
 public class LoggingInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
-    public ClientHttpResponse intercept(final HttpRequest request,
-                                        final byte[] body,
-                                        final ClientHttpRequestExecution execution)
+    public ClientHttpResponse intercept(
+            final HttpRequest request,
+            final byte[] body,
+            final ClientHttpRequestExecution execution)
             throws IOException {
         logRequestDetails(request, body);
         ClientHttpResponse response = execution.execute(request, body);
@@ -32,11 +33,13 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
      * @throws IOException if an I/O error occurs
      */
     private void logRequestDetails(
-            final HttpRequest request, final byte[] body) throws IOException {
+            final HttpRequest request, final byte[] body)
+            throws IOException {
         System.out.println("URI: " + request.getURI());
         System.out.println("Method: " + request.getMethod());
         System.out.println("Headers: " + request.getHeaders());
-        System.out.println("Request body: " + new String(body, StandardCharsets.UTF_8));
+        System.out.println(
+                "Request body: " + new String(body, StandardCharsets.UTF_8));
     }
 
     /**

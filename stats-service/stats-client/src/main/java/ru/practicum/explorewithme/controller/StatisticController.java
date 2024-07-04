@@ -27,6 +27,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class StatisticController {
+    /**
+     * Client for handling statistic requests.
+     */
     private final StatisticClient client;
 
     /**
@@ -63,7 +66,8 @@ public class StatisticController {
             @RequestParam(value = "unique", defaultValue = "false")
             final boolean unique) {
         if (!start.isBefore(end)) {
-            throw new WrongTimeException("Начало эвента должно быть раньше конца");
+            throw new WrongTimeException(
+                    "Начало эвента должно быть раньше конца");
         }
         return client.getStatistic(start, end, uris, unique);
     }

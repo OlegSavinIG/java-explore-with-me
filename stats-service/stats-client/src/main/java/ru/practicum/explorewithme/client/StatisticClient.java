@@ -54,11 +54,14 @@ public class StatisticClient {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String startTime =
-                URLEncoder.encode(start.format(formatter), StandardCharsets.UTF_8);
+                URLEncoder.encode(
+                        start.format(formatter), StandardCharsets.UTF_8);
         String endTime =
-                URLEncoder.encode(end.format(formatter), StandardCharsets.UTF_8);
+                URLEncoder.encode(
+                        end.format(formatter), StandardCharsets.UTF_8);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("/stats")
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl("/stats")
                 .queryParam("start", startTime)
                 .queryParam("end", endTime)
                 .queryParam("unique", unique);
