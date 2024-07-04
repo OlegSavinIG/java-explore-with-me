@@ -16,7 +16,10 @@ import java.time.Duration;
  */
 @Configuration
 public class WebClientConfig {
-
+    /**
+     * Time for response
+     */
+   private final int responseTime = 5;
     /**
      * Configures the WebClient bean.
      *
@@ -27,13 +30,13 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient(final WebClient.Builder builder,
                                @Value("${server.url}") final String serverUrl) {
-        int responseTime = 5;
         return builder
                 .baseUrl(serverUrl)
                 .defaultHeader("Content-Type", "application/json")
                 .clientConnector(
                         new ReactorClientHttpConnector(HttpClient.create()
-                                .responseTimeout(Duration.ofSeconds(responseTime))))
+                                .responseTimeout(
+                                        Duration.ofSeconds(responseTime))))
                 .filter(logRequest())
                 .filter(logResponse())
                 .build();
@@ -52,7 +55,8 @@ public class WebClientConfig {
                                     + " " + clientRequest.url());
                     clientRequest.headers().forEach(
                             (name, values) -> values.forEach(
-                                    value -> System.out.println(name + ": " + value)));
+                                    value -> System.out.println(
+                                            name + ": " + value)));
                     return Mono.just(clientRequest);
                 });
     }
@@ -69,7 +73,8 @@ public class WebClientConfig {
                             "Response Status: " + clientResponse.statusCode());
                     clientResponse.headers().asHttpHeaders().forEach(
                             (name, values) -> values.forEach(
-                                    value -> System.out.println(name + ": " + value)));
+                                    value -> System.out.println(
+                                            name + ": " + value)));
                     return Mono.just(clientResponse);
                 });
     }

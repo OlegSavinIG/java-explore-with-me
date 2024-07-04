@@ -12,7 +12,9 @@ import java.nio.charset.StandardCharsets;
  * Interceptor for logging HTTP requests and responses.
  */
 public class LoggingInterceptor implements ClientHttpRequestInterceptor {
-
+    /**
+     * Logs the details of the HTTP request.
+     */
     @Override
     public ClientHttpResponse intercept(
             final HttpRequest request,

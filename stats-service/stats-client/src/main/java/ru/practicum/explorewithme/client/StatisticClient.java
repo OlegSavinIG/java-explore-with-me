@@ -21,7 +21,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StatisticClient {
-
+    /**
+     * Client for handling statistics via web client.
+     */
     private final WebClient webClient;
 
     /**

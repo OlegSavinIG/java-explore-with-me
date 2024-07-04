@@ -9,7 +9,9 @@ import java.io.IOException;
  * Custom error handler for REST responses.
  */
 public class CustomResponseErrorHandler implements ResponseErrorHandler {
-
+    /**
+     * Handles the error from the response.
+     */
     @Override
     public boolean hasError(
             final ClientHttpResponse response) throws IOException {
