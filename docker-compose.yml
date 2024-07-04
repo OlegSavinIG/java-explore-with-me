@@ -42,7 +42,7 @@ services:
   http-server:
     container_name: http-server
     build:
-      context: ./statistics-service/http-server
+      context: ./stats-service/http-server
       dockerfile: Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stat:5432/stat_db
@@ -56,7 +56,7 @@ services:
   http-client:
     container_name: http-client
     build:
-      context: ./statistics-service/http-client
+      context: ./stats-service/http-client
       dockerfile: Dockerfile
     depends_on:
       - http-server
