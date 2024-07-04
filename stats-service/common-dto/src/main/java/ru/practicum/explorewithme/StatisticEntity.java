@@ -27,12 +27,24 @@ public class StatisticEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * The name of the application.
+     */
     private String app;
 
+    /**
+     * The URI of the request.
+     */
     private String uri;
 
+    /**
+     * The IP address of the client.
+     */
     private String ip;
 
+    /**
+     * The creation time of the statistic record.
+     */
     @Column(name = "creation_time")
     private LocalDateTime creationTime;
 }
