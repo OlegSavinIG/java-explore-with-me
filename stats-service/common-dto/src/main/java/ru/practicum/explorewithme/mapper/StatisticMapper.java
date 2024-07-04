@@ -1,7 +1,5 @@
 package ru.practicum.explorewithme.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.StatisticEntity;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
@@ -10,7 +8,7 @@ import ru.practicum.explorewithme.StatisticResponse;
  * Mapper class for converting between StatisticEntity and DTOs.
  */
 //@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class StatisticMapper {
+public final class StatisticMapper {
     private StatisticMapper() {
         throw new UnsupportedOperationException("This is a utility "
                 + "class and cannot be instantiated");
