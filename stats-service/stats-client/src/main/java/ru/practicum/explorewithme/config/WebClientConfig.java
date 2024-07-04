@@ -18,7 +18,9 @@ import java.time.Duration;
 public class WebClientConfig {
 
     @Bean
-    public WebClient webClient(final WebClient.Builder builder, @Value("${server.url}") final String serverUrl) {
+    public WebClient webClient(
+            final WebClient.Builder builder,
+            @Value("${server.url}") final String serverUrl) {
         return builder
                 .baseUrl(serverUrl)
                 .defaultHeader("Content-Type", "application/json")
@@ -32,7 +34,9 @@ public class WebClientConfig {
     private ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
             System.out.println("Request: " + clientRequest.method() + " " + clientRequest.url());
-            clientRequest.headers().forEach((name, values) -> values.forEach(value -> System.out.println(name + ": " + value)));
+            clientRequest.headers().forEach(
+                    (name, values) -> values.forEach(
+                            value -> System.out.println(name + ": " + value)));
             return Mono.just(clientRequest);
         });
     }
@@ -40,7 +44,9 @@ public class WebClientConfig {
     private ExchangeFilterFunction logResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
             System.out.println("Response Status: " + clientResponse.statusCode());
-            clientResponse.headers().asHttpHeaders().forEach((name, values) -> values.forEach(value -> System.out.println(name + ": " + value)));
+            clientResponse.headers().asHttpHeaders().forEach(
+                    (name, values) -> values.forEach(
+                            value -> System.out.println(name + ": " + value)));
             return Mono.just(clientResponse);
         });
     }
