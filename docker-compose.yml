@@ -39,7 +39,7 @@ services:
     ports:
       - "8080:8080"
 
-  http-server:
+  stats-server:
     container_name: stats-server
     build:
       context: ./stats-service/stats-server
@@ -53,7 +53,7 @@ services:
     ports:
       - "8081:8080"
 
-  http-client:
+  stats-client:
     container_name: stats-client
     build:
       context: ./stats-service/stats-client
