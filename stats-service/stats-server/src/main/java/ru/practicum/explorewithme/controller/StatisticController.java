@@ -3,7 +3,11 @@ package ru.practicum.explorewithme.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 import ru.practicum.explorewithme.service.StatisticService;
@@ -33,9 +37,9 @@ public class StatisticController {
     /**
      * Retrieves statistics.
      *
-     * @param start  the start date and time
-     * @param end    the end date and time
-     * @param uris   the list of URIs
+     * @param start the start date and time
+     * @param end the end date and time
+     * @param uris the list of URIs
      * @param unique whether to count only unique hits
      * @return a ResponseEntity containing the list of statistics
      */

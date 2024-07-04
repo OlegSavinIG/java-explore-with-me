@@ -8,7 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class WrongTimeException extends RuntimeException {
-    public WrongTimeException(final String s) {
-        super(s);
+
+    /**
+     * Constructor for WrongTimeException.
+     *
+     * @param message the detail message
+     */
+    public WrongTimeException(final String message) {
+        super(message);
     }
 }
