@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the StatisticService interface.
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -21,22 +24,25 @@ public class StatisticServiceImpl implements StatisticService {
     private final StatisticRepository repository;
 
     @Override
-    public StatisticResponse saveStatistic(StatisticRequest request) {
+    public StatisticResponse saveStatistic(final StatisticRequest request) {
         return StatisticMapper.toResponse(repository.save(StatisticMapper.toEntity(request)));
     }
 
     @Override
-    public List<StatisticResponse> getStatistic(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+    public List<StatisticResponse> getStatistic(final LocalDateTime start, final LocalDateTime end,
+                                                final List<String> uris, final boolean unique) {
         List<StatisticEntity> statistic;
         if (unique) {
-            statistic = repository.findAllStatisticWithUniqueIp(start, end);
-            if (!uris.isEmpty()) {
+            if (uris != null && !uris.isEmpty()) {
                 statistic = repository.findAllStatisticByUrisWithUniqueIp(start, end, uris);
+            } else {
+                statistic = repository.findAllStatisticWithUniqueIp(start, end);
             }
         } else {
-            statistic = repository.findAllStatistic(start, end);
-            if (!uris.isEmpty()) {
+            if (uris != null && !uris.isEmpty()) {
                 statistic = repository.findAllStatisticByUris(start, end, uris);
+            } else {
+                statistic = repository.findAllStatistic(start, end);
             }
         }
         return statistic.stream()

@@ -39,9 +39,9 @@ public class StatisticController {
     /**
      * Retrieves statistics.
      *
-     * @param start the start date and time
-     * @param end the end date and time
-     * @param uris the list of URIs
+     * @param start  the start date and time
+     * @param end    the end date and time
+     * @param uris   the list of URIs
      * @param unique whether to count only unique hits
      * @return a Flux containing the statistics
      */

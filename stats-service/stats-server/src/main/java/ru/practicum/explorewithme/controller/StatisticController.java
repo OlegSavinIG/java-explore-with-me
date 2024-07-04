@@ -11,21 +11,42 @@ import ru.practicum.explorewithme.service.StatisticService;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Controller for handling statistic requests.
+ */
 @RestController
 @RequiredArgsConstructor
 public class StatisticController {
     private final StatisticService service;
 
+    /**
+     * Saves a statistic.
+     *
+     * @param request the statistic request
+     * @return the saved statistic response
+     */
     @PostMapping("/hit")
-    public ResponseEntity<StatisticResponse> saveStatistic(@RequestBody StatisticRequest request) {
+    public ResponseEntity<StatisticResponse> saveStatistic(@RequestBody final StatisticRequest request) {
         return ResponseEntity.ok(service.saveStatistic(request));
     }
 
+    /**
+     * Retrieves statistics.
+     *
+     * @param start  the start date and time
+     * @param end    the end date and time
+     * @param uris   the list of URIs
+     * @param unique whether to count only unique hits
+     * @return a ResponseEntity containing the list of statistics
+     */
     @GetMapping("/stats")
-    public ResponseEntity<List<StatisticResponse>> getStatistic(@RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                                                                @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-                                                                @RequestParam(value = "uris", required = false) List<String> uris,
-                                                                @RequestParam(value = "unique", defaultValue = "false") boolean unique) {
+    public ResponseEntity<List<StatisticResponse>> getStatistic(
+            @RequestParam("start")
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final LocalDateTime start,
+            @RequestParam("end")
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final LocalDateTime end,
+            @RequestParam(value = "uris", required = false) final List<String> uris,
+            @RequestParam(value = "unique", defaultValue = "false") final boolean unique) {
         return ResponseEntity.ok(service.getStatistic(start, end, uris, unique));
     }
 }

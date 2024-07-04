@@ -11,7 +11,7 @@ public final class ExploreWithMeApp {
 
     private ExploreWithMeApp() {
         throw new UnsupportedOperationException("This is a utility "
-               + "class and cannot be instantiated");
+                + "class and cannot be instantiated");
     }
 
     /**
