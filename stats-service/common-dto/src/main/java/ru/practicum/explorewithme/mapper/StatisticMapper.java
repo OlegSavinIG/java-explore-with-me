@@ -6,9 +6,19 @@ import ru.practicum.explorewithme.StatisticEntity;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 
+/**
+ * Mapper class for converting between StatisticEntity and DTOs.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatisticMapper {
-    public static StatisticEntity toEntity(StatisticRequest request) {
+
+    /**
+     * Converts a StatisticRequest to a StatisticEntity.
+     *
+     * @param request the StatisticRequest to convert
+     * @return the converted StatisticEntity
+     */
+    public static StatisticEntity toEntity(final StatisticRequest request) {
         return StatisticEntity.builder()
                 .app(request.getApp())
                 .uri(request.getUri())
@@ -17,7 +27,13 @@ public class StatisticMapper {
                 .build();
     }
 
-    public static StatisticResponse toResponse(StatisticEntity entity) {
+    /**
+     * Converts a StatisticEntity to a StatisticResponse.
+     *
+     * @param entity the StatisticEntity to convert
+     * @return the converted StatisticResponse
+     */
+    public static StatisticResponse toResponse(final StatisticEntity entity) {
         return StatisticResponse.builder()
                 .app(entity.getApp())
                 .uri(entity.getUri())

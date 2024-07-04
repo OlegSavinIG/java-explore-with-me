@@ -9,6 +9,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+/**
+ * Request DTO for statistic data.
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -17,12 +20,15 @@ public class StatisticRequest {
     @NotNull
     @NotBlank
     private String app;
+
     @NotNull
     @NotBlank
     private String uri;
+
     @NotNull
     @NotBlank
     private String ip;
+
     @NotNull
     private LocalDateTime creationTime;
 }
