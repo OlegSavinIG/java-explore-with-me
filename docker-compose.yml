@@ -40,9 +40,9 @@ services:
       - "8080:8080"
 
   http-server:
-    container_name: http-server
+    container_name: stats-server
     build:
-      context: ./stats-service/http-server
+      context: ./stats-service/stats-server
       dockerfile: Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stat:5432/stat_db
@@ -54,12 +54,12 @@ services:
       - "8081:8080"
 
   http-client:
-    container_name: http-client
+    container_name: stats-client
     build:
-      context: ./stats-service/http-client
+      context: ./stats-service/stats-client
       dockerfile: Dockerfile
     depends_on:
-      - http-server
+      - stats-server
     environment:
       SERVER_URL: http://http-server:8080
     ports:
