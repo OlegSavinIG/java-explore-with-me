@@ -14,7 +14,8 @@ public final class EWMStatisticServiceApp {
     }
 
     /**
-     * The main method which serves as the entry point for the application.
+     * The main method which serves as
+     * the entry point for the application.
      *
      * @param args the command line arguments
      */
