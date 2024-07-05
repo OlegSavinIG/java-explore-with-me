@@ -37,7 +37,7 @@ services:
     depends_on:
       - postgres-main
     ports:
-      - "8080:8080"
+      - "9090:9090"
 
   stats-server:
     container_name: stats-server
