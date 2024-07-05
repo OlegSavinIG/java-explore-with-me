@@ -21,6 +21,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class StatisticController {
+    /**
+     * Service for handling statistic requests.
+     */
     private final StatisticService service;
 
     /**

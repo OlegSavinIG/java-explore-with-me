@@ -13,7 +13,8 @@ import java.util.List;
  * Repository for accessing statistic data.
  */
 @Repository
-public interface StatisticRepository extends JpaRepository<StatisticEntity, Long> {
+public interface StatisticRepository
+        extends JpaRepository<StatisticEntity, Long> {
 
     /**
      * Finds all statistics with
@@ -23,8 +24,9 @@ public interface StatisticRepository extends JpaRepository<StatisticEntity, Long
      * @param end   the end time
      * @return the list of statistics
      */
-    @Query("SELECT s FROM StatisticEntity s" +
-            " WHERE s.creationTime BETWEEN :start AND :end GROUP BY s.ip, s.uri")
+    @Query("SELECT s FROM StatisticEntity s "
+            + " WHERE s.creationTime "
+            + "BETWEEN :start AND :end GROUP BY s.ip, s.uri")
     List<StatisticEntity> findAllStatisticWithUniqueIp(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
@@ -38,8 +40,8 @@ public interface StatisticRepository extends JpaRepository<StatisticEntity, Long
      * @param uris  the list of URIs
      * @return the list of statistics
      */
-    @Query("SELECT s FROM StatisticEntity s WHERE s.uri IN :uris " +
-            "AND s.creationTime BETWEEN :start AND :end GROUP BY s.ip, s.uri")
+    @Query("SELECT s FROM StatisticEntity s WHERE s.uri IN :uris "
+            + "AND s.creationTime BETWEEN :start AND :end GROUP BY s.ip, s.uri")
     List<StatisticEntity> findAllStatisticByUrisWithUniqueIp(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,
@@ -52,8 +54,8 @@ public interface StatisticRepository extends JpaRepository<StatisticEntity, Long
      * @param end   the end time
      * @return the list of statistics
      */
-    @Query("SELECT s FROM StatisticEntity s " +
-            "WHERE s.creationTime BETWEEN :start AND :end")
+    @Query("SELECT s FROM StatisticEntity s "
+            + "WHERE s.creationTime BETWEEN :start AND :end")
     List<StatisticEntity> findAllStatistic(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
@@ -67,8 +69,8 @@ public interface StatisticRepository extends JpaRepository<StatisticEntity, Long
      * @param uris  the list of URIs
      * @return the list of statistics
      */
-    @Query("SELECT s FROM StatisticEntity s WHERE s.uri IN :uris " +
-            "AND s.creationTime BETWEEN :start AND :end")
+    @Query("SELECT s FROM StatisticEntity s WHERE s.uri IN :uris "
+            + "AND s.creationTime BETWEEN :start AND :end")
     List<StatisticEntity> findAllStatisticByUris(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,

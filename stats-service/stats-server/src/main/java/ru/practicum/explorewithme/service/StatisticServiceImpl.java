@@ -20,9 +20,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class StatisticServiceImpl implements StatisticService {
-
+    /**
+     * Repository of the StatisticService interface.
+     */
     private final StatisticRepository repository;
 
+    /**
+     * Saves a statistic.
+     *
+     * @param request the request containing the statistic data
+     * @return the response containing the saved statistic data
+     */
     @Override
     public StatisticResponse saveStatistic(
             final StatisticRequest request) {
@@ -30,10 +38,18 @@ public class StatisticServiceImpl implements StatisticService {
                 repository.save(StatisticMapper.toEntity(request)));
     }
 
+    /**
+     * Retrieves statistics based on the provided parameters.
+     *
+     * @param start  the start date and time
+     * @param end    the end date and time
+     * @param uris   the list of URIs (optional)
+     * @param unique whether to count only unique hits
+     * @return a list of statistics
+     */
     @Override
     public List<StatisticResponse> getStatistic(
-            final LocalDateTime start,
-            final LocalDateTime end,
+            final LocalDateTime start, final LocalDateTime end,
             final List<String> uris, final boolean unique) {
         List<StatisticEntity> statistic;
         if (unique) {
@@ -43,13 +59,17 @@ public class StatisticServiceImpl implements StatisticService {
                                 start, end, uris);
             } else {
                 statistic =
-                        repository.findAllStatisticWithUniqueIp(start, end);
+                        repository.findAllStatisticWithUniqueIp(
+                                start, end);
             }
         } else {
             if (uris != null && !uris.isEmpty()) {
-                statistic = repository.findAllStatisticByUris(start, end, uris);
+                statistic =
+                        repository.findAllStatisticByUris(
+                                start, end, uris);
             } else {
-                statistic = repository.findAllStatistic(start, end);
+                statistic =
+                        repository.findAllStatistic(start, end);
             }
         }
         return statistic.stream()
