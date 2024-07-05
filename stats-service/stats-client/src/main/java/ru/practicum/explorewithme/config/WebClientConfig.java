@@ -17,10 +17,10 @@ import java.time.Duration;
 @Configuration
 public class WebClientConfig {
     /**
-     * Time for response
-     * @param responseTime time
+     * For server time response
      */
-   private final int responseTime = 5;
+    private final int responseTime = 5;
+
     /**
      * Configures the WebClient bean.
      *
