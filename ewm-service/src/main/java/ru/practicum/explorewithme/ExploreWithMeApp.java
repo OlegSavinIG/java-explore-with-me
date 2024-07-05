@@ -7,13 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Main application class for ExploreWithMe.
  */
 @SpringBootApplication
-public final class ExploreWithMeApp {
-
-    private ExploreWithMeApp() {
-        throw new UnsupportedOperationException("This is a utility "
-                + "class and cannot be instantiated");
-    }
-
+public class ExploreWithMeApp {
     /**
      * The main method which serves as the entry point for the application.
      *

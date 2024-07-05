@@ -7,12 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Main application class for EWM Statistic Client.
  */
 @SpringBootApplication
-public final class EWMStatisticClientApp {
-    private EWMStatisticClientApp() {
-        throw new UnsupportedOperationException("This is a utility "
-                + "class and cannot be instantiated");
-    }
-
+public class EWMStatisticClientApp {
     /**
      * The main method which serves as the entry point for the application.
      *
