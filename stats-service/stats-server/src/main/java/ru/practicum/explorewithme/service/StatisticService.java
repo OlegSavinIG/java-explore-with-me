@@ -28,5 +28,7 @@ public interface StatisticService {
      * @param unique whether to count only unique hits
      * @return the list of statistics
      */
-    List<StatisticResponse> getStatistic(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique);
+    List<StatisticResponse> getStatistic(
+            LocalDateTime start,
+            LocalDateTime end, List<String> uris, boolean unique);
 }

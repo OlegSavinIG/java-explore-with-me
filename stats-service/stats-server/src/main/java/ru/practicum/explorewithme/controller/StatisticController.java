@@ -30,7 +30,8 @@ public class StatisticController {
      * @return the saved statistic response
      */
     @PostMapping("/hit")
-    public ResponseEntity<StatisticResponse> saveStatistic(@RequestBody final StatisticRequest request) {
+    public ResponseEntity<StatisticResponse> saveStatistic(
+            @RequestBody final StatisticRequest request) {
         return ResponseEntity.ok(service.saveStatistic(request));
     }
 
@@ -46,11 +47,16 @@ public class StatisticController {
     @GetMapping("/stats")
     public ResponseEntity<List<StatisticResponse>> getStatistic(
             @RequestParam("start")
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final LocalDateTime start,
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+            final LocalDateTime start,
             @RequestParam("end")
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final LocalDateTime end,
-            @RequestParam(value = "uris", required = false) final List<String> uris,
-            @RequestParam(value = "unique", defaultValue = "false") final boolean unique) {
-        return ResponseEntity.ok(service.getStatistic(start, end, uris, unique));
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+            final LocalDateTime end,
+            @RequestParam(value = "uris", required = false)
+            final List<String> uris,
+            @RequestParam(value = "unique", defaultValue = "false")
+            final boolean unique) {
+        return ResponseEntity.ok(
+                service.getStatistic(start, end, uris, unique));
     }
 }
