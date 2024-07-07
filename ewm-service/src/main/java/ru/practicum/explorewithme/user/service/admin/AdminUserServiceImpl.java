@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.user.service;
+package ru.practicum.explorewithme.user.service.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

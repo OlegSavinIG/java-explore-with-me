@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
+import ru.practicum.explorewithme.category.model.CategoryResponse;
 import ru.practicum.explorewithme.user.model.UserEntity;
 
 import javax.persistence.*;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String title;
     private String annotation;
     private String description;
@@ -42,7 +43,7 @@ public class EventEntity {
     private String state;
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private CategoryEntity category;
+    private CategoryResponse category;
     @ManyToOne
     @JoinColumn(name = "initiator_id")
     private UserEntity initiator;

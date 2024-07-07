@@ -29,5 +29,5 @@ public class EventRequest {
     private Integer participantLimit;
     private Boolean requestModeration;
     private Integer category;
-    private EventStatus stateAction;
+    private String stateAction;
 }

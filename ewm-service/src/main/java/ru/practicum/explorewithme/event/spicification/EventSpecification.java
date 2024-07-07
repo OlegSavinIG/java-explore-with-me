@@ -12,7 +12,7 @@ public class EventSpecification {
             if (users.isEmpty() || users == null) {
                 return criteriaBuilder.conjunction();
             }
-            return root.get("user").get("id").in(users);
+            return root.get("initiator").get("id").in(users);
         };
     }
 
@@ -39,7 +39,7 @@ public class EventSpecification {
             if (rangeStart == null) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.greaterThanOrEqualTo(root.get("date"), rangeStart);
+            return criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), rangeStart);
         };
     }
 
@@ -48,7 +48,7 @@ public class EventSpecification {
             if (rangeEnd == null) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.lessThanOrEqualTo(root.get("date"), rangeEnd);
+            return criteriaBuilder.lessThanOrEqualTo(root.get("eventDate"), rangeEnd);
         };
     }
 }
