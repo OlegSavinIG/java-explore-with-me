@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.category.model;
+package ru.practicum.explorewithme.compilation.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +12,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "categories")
-public class CategoryEntity {
+@Table(name = "compilations")
+public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
+    private String title;
+    private Boolean pinned;
 }

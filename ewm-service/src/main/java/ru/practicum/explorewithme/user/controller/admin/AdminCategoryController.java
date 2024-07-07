@@ -3,6 +3,8 @@ package ru.practicum.explorewithme.user.controller.admin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.explorewithme.category.model.CategoryRequest;
+import ru.practicum.explorewithme.category.model.CategoryResponse;
 import ru.practicum.explorewithme.user.service.admin.AdminCategoryService;
 
 import javax.validation.Valid;
@@ -29,6 +31,6 @@ public class AdminCategoryController {
     public ResponseEntity<CategoryResponse> updateCategory(
             @PathVariable Long catId,
             @Valid @RequestBody CategoryRequest category) {
-        return service.updateCategory(category, catId);
+        return ResponseEntity.ok(service.updateCategory(category, catId));
     }
 }

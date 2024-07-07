@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class EventSearchCriteria {
+public class EventSearchCriteriaForAdmin {
     private List<Long> users;
     private List<String> states;
     private List<Long> categories;
