@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompilationController {
     private final CompilationService service;
+
     @GetMapping
     public ResponseEntity<List<CompilationResponse>> getCompilations(
             @RequestParam(defaultValue = "false") Boolean pinned,

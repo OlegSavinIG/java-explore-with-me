@@ -1,6 +1,5 @@
 package ru.practicum.explorewithme.user.service.admin;
 
-import org.springframework.http.ResponseEntity;
 import ru.practicum.explorewithme.category.model.CategoryRequest;
 import ru.practicum.explorewithme.category.model.CategoryResponse;
 

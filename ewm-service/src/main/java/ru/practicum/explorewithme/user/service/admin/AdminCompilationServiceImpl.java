@@ -19,10 +19,11 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     private final AdminCompilationRepository repository;
     private final CompilationMapper mapper;
     private final EventService eventService;
+
     @Override
     public CompilationResponse createCompilation(CompilationRequest request) {
         CompilationEntity entity = repository.save(mapper.toEntity(request, eventService));
-       return mapper.toResponse(repository.save(entity));
+        return mapper.toResponse(repository.save(entity));
     }
 
     @Override

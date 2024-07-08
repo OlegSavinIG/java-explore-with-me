@@ -17,14 +17,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService service;
-@GetMapping
+
+    @GetMapping
     public ResponseEntity<List<CategoryResponse>> getCategories(
             @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
             @Positive @RequestParam(defaultValue = "10") Integer size) {
-    return ResponseEntity.ok(service.getCategories(from, size));
-}
-@GetMapping("/{catId}")
-    public ResponseEntity<CategoryResponse> getCategory(@PathVariable Integer catId){
-    return ResponseEntity.ok(service.getCategory(catId));
-}
+        return ResponseEntity.ok(service.getCategories(from, size));
+    }
+
+    @GetMapping("/{catId}")
+    public ResponseEntity<CategoryResponse> getCategory(@PathVariable Integer catId) {
+        return ResponseEntity.ok(service.getCategory(catId));
+    }
 }

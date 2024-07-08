@@ -9,5 +9,6 @@ public interface EventService {
     List<EventResponse> getEvents(EventSearchCriteria criteria, Integer from, Integer size);
 
     EventResponse getEvent(Long id);
+
     List<EventResponse> getEventsByIds(List<Long> ids);
 }

@@ -14,7 +14,7 @@ public class EventSpecification {
     }
 
     public static Specification<EventEntity> hasStates(List<String> states) {
-        return (root, query, criteriaBuilder) ->  root.get("state").in(states);
+        return (root, query, criteriaBuilder) -> root.get("state").in(states);
     }
 
     public static Specification<EventEntity> hasCategories(List<Integer> categories) {
@@ -30,6 +30,7 @@ public class EventSpecification {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.lessThanOrEqualTo(root.get("eventDate"), rangeEnd);
     }
+
     public static Specification<EventEntity> containsText(String text) {
         return (root, query, criteriaBuilder) -> {
             String pattern = "%" + text.toLowerCase() + "%";

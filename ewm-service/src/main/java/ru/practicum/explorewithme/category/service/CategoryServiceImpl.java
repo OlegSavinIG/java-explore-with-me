@@ -18,9 +18,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
+
     @Override
     public List<CategoryResponse> getCategories(Integer from, Integer size) {
-        Pageable pageable = PageRequest.of(from/size, size);
+        Pageable pageable = PageRequest.of(from / size, size);
         Page<CategoryEntity> categoryEntities = repository.findAll(pageable);
         return categoryEntities.stream()
                 .map(CategoryMapper::toResponse)

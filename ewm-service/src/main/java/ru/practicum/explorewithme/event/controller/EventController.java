@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService service;
+
     @GetMapping
     public ResponseEntity<List<EventResponse>> getEvents(
             @ModelAttribute EventSearchCriteria criteria,
@@ -23,6 +24,7 @@ public class EventController {
     ) {
         return ResponseEntity.ok(service.getEvents(criteria, from, size));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<EventResponse> getEvent(@PathVariable Long id) {
         return ResponseEntity.ok(service.getEvent(id));

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
-import ru.practicum.explorewithme.category.model.mapper.CategoryMapper;
 import ru.practicum.explorewithme.category.repository.CategoryRepository;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventRequest;
@@ -74,7 +73,7 @@ public class AdminEventServiceImpl implements AdminEventService {
             CategoryEntity category = categoryRepository.findById(
                             request.getCategory())
                     .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-            event.setCategory(CategoryMapper.toResponse(category));
+            event.setCategory(category);
         }
         if (request.getDescription() != null) {
             event.setDescription(request.getDescription());

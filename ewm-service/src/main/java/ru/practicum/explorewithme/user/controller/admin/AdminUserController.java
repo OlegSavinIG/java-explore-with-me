@@ -28,8 +28,8 @@ public class AdminUserController {
     @GetMapping("/users")
     public ResponseEntity<Collection<UserResponse>> getUsersInformation(
             @RequestParam(required = false) List<Long> ids,
-           @PositiveOrZero @RequestParam(defaultValue = "0") int from,
-           @Positive @RequestParam(defaultValue = "10") int size) {
+            @PositiveOrZero @RequestParam(defaultValue = "0") int from,
+            @Positive @RequestParam(defaultValue = "10") int size) {
         if (ids != null && !ids.isEmpty()) {
             return ResponseEntity.ok(service.findByIds(ids, from, size));
         } else {

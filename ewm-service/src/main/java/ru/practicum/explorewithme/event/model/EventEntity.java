@@ -6,11 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
-import ru.practicum.explorewithme.category.model.CategoryResponse;
 import ru.practicum.explorewithme.user.model.UserEntity;
-import ru.practicum.explorewithme.user.model.UserResponse;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

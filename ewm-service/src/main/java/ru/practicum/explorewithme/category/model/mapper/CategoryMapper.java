@@ -10,4 +10,11 @@ public class CategoryMapper {
     public static CategoryResponse toResponse(CategoryEntity categoryEntity) {
         return CategoryResponse.builder().build();
     }
+
+    public static CategoryEntity toEntity(CategoryResponse category) {
+        return CategoryEntity.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
+    }
 }
