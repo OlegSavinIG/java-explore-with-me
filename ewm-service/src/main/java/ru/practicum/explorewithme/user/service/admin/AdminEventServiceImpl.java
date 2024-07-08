@@ -17,7 +17,7 @@ import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.event.spicification.EventSpecification;
 import ru.practicum.explorewithme.exception.EventNotFoundException;
 import ru.practicum.explorewithme.exception.InvalidEventStateException;
-import ru.practicum.explorewithme.user.model.EventSearchCriteria;
+import ru.practicum.explorewithme.user.model.EventSearchCriteriaForAdmin;
 import ru.practicum.explorewithme.user.repository.AdminEventRepository;
 
 import java.time.LocalDateTime;
@@ -33,16 +33,30 @@ public class AdminEventServiceImpl implements AdminEventService {
 
     @Override
     public List<EventResponse> getEvents(
-            EventSearchCriteria criteria, Integer from, Integer size) {
-
+            EventSearchCriteriaForAdmin criteria, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        Specification<EventEntity> specification = Specification.where(
-                EventSpecification.hasUsers(criteria.getUsers())
-                        .and(EventSpecification.hasCategories(criteria.getCategories()))
-                        .and(EventSpecification.hasStates(criteria.getStates()))
-                        .and(EventSpecification.dateBefore(criteria.getRangeEnd()))
-                        .and(EventSpecification.dateAfter(criteria.getRangeStart())));
-        Page<EventEntity> eventEntities = repository.findAll(specification, pageable);
+        Specification<EventEntity> spec = Specification.where(null);
+
+        if (criteria.getUsers() != null && !criteria.getUsers().isEmpty()) {
+            spec = spec.and(EventSpecification.hasUsers(criteria.getUsers()));
+        }
+
+        if (criteria.getStates() != null && !criteria.getStates().isEmpty()) {
+            spec = spec.and(EventSpecification.hasStates(criteria.getStates()));
+        }
+
+        if (criteria.getCategories() != null && !criteria.getCategories().isEmpty()) {
+            spec = spec.and(EventSpecification.hasCategories(criteria.getCategories()));
+        }
+
+        if (criteria.getRangeStart() != null) {
+            spec = spec.and(EventSpecification.dateAfter(criteria.getRangeStart()));
+        }
+
+        if (criteria.getRangeEnd() != null) {
+            spec = spec.and(EventSpecification.dateBefore(criteria.getRangeEnd()));
+        }
+        Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
         return eventEntities.stream()
                 .map(EventMapper::toResponse)
                 .collect(Collectors.toList());
@@ -58,7 +72,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         }
         if (request.getCategory() != null) {
             CategoryEntity category = categoryRepository.findById(
-                    request.getCategory())
+                            request.getCategory())
                     .orElseThrow(() -> new IllegalArgumentException("Category not found"));
             event.setCategory(CategoryMapper.toResponse(category));
         }

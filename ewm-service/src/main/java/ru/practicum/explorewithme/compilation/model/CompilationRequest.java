@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.explorewithme.event.model.EventResponse;
 
 import java.util.List;
 
@@ -12,9 +11,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompilationResponse {
-    private Integer id;
+public class CompilationRequest {
     private String title;
     private Boolean pinned;
-    private List<EventResponse> events;
+    private List<Long> events;
 }

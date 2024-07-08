@@ -12,7 +12,7 @@ import java.util.List;
 public class EventSearchCriteriaForAdmin {
     private List<Long> users;
     private List<String> states;
-    private List<Long> categories;
+    private List<Integer> categories;
     private LocalDateTime rangeStart;
     private LocalDateTime rangeEnd;
 }

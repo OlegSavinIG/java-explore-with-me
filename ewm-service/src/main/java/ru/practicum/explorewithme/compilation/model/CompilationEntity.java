@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.explorewithme.event.model.EventResponse;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,10 +15,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "compilations")
-public class Compilation {
+public class CompilationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
     private Boolean pinned;
+    @OneToMany
+    @JoinColumn(name = "event_id")
+    private List<EventResponse> events;
 }
