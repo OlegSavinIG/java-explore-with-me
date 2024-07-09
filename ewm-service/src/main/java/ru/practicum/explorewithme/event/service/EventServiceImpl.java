@@ -15,6 +15,7 @@ import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.event.spicification.EventSpecification;
 import ru.practicum.explorewithme.exception.NotExistException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,13 +31,9 @@ public class EventServiceImpl implements EventService {
         if (!criteria.getCategories().isEmpty() || criteria.getCategories() != null) {
             spec = spec.and(EventSpecification.hasCategories(criteria.getCategories()));
         }
-        if (criteria.getRangeStart() != null) {
-            spec = spec.and(EventSpecification.dateAfter(criteria.getRangeStart()));
-        }
+        spec = spec.and(EventSpecification.dateAfter(criteria.getRangeStart()));
 
-        if (criteria.getRangeEnd() != null) {
-            spec = spec.and(EventSpecification.dateBefore(criteria.getRangeEnd()));
-        }
+        spec = spec.and(EventSpecification.dateBefore(criteria.getRangeEnd()));
         if (!criteria.getText().isEmpty() || criteria.getText() != null) {
             spec = spec.and(EventSpecification.containsText(criteria.getText()));
         }
@@ -70,6 +67,9 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventResponse> getEventsByIds(List<Long> ids) {
         List<EventEntity> eventEntities = repository.findAllById(ids);
+        if (eventEntities.isEmpty()) {
+            return Collections.emptyList();
+        }
         return eventEntities.stream()
                 .map(EventMapper::toResponse)
                 .collect(Collectors.toList());

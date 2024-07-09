@@ -15,6 +15,8 @@ public interface AdminUserService {
     Collection<UserResponse> findAll(int from, int size);
 
     void deleteUserById(Long userId);
+
     UserResponse findById(Long userId);
+
     UserEntity findUserEntity(Long userId);
 }

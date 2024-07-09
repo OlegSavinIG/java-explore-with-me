@@ -47,6 +47,10 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public void deleteUserById(Long userId) {
+        boolean existsById = repository.existsById(userId);
+        if (!existsById) {
+            throw new NotExistException("User not exist");
+        }
         repository.deleteById(userId);
     }
 
@@ -60,6 +64,6 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public UserEntity findUserEntity(Long userId) {
         return repository.findById(userId)
-                .orElseThrow(() -> new NotExistException("User does not exist") );
+                .orElseThrow(() -> new NotExistException("User does not exist"));
     }
 }

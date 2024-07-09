@@ -37,7 +37,7 @@ public class PrivateUserEventsController {
     @PostMapping("/{userId}/events")
     public ResponseEntity<EventResponse> createEvent(
             @PathVariable Long userId,
-           @Validated(DefaultValidation.class) @RequestBody EventRequest request
+            @Validated(DefaultValidation.class) @RequestBody EventRequest request
     ) {
         return ResponseEntity.ok(service.createEvent(request, userId));
     }

@@ -9,6 +9,7 @@ public interface CategoryService {
     List<CategoryResponse> getCategories(Integer from, Integer size);
 
     CategoryResponse getCategory(Integer catId);
+
     CategoryEntity getCategoryEntity(Integer catId);
 
 }

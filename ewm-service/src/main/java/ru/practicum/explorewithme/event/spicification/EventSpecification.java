@@ -22,13 +22,21 @@ public class EventSpecification {
     }
 
     public static Specification<EventEntity> dateAfter(LocalDateTime rangeStart) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), rangeStart);
+        return (root, query, criteriaBuilder) -> {
+            if (rangeStart == null) {
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), LocalDateTime.now());
+            }
+            return criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), rangeStart);
+        };
     }
 
     public static Specification<EventEntity> dateBefore(LocalDateTime rangeEnd) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.lessThanOrEqualTo(root.get("eventDate"), rangeEnd);
+        return (root, query, criteriaBuilder) -> {
+            if (rangeEnd == null) {
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), LocalDateTime.now());
+            }
+            return criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), rangeEnd);
+        };
     }
 
     public static Specification<EventEntity> containsText(String text) {

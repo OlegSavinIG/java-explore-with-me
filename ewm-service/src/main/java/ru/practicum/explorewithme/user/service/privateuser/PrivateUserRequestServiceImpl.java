@@ -2,11 +2,14 @@ package ru.practicum.explorewithme.user.service.privateuser;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.event.service.EventService;
+import ru.practicum.explorewithme.exception.AlreadyExistException;
 import ru.practicum.explorewithme.exception.NotExistException;
+import ru.practicum.explorewithme.exists.ExistChecker;
 import ru.practicum.explorewithme.user.model.UserEntity;
 import ru.practicum.explorewithme.user.repository.RequestRepository;
 import ru.practicum.explorewithme.user.request.model.*;
@@ -28,9 +31,12 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
     private final EventService eventService;
     private final EventRepository eventRepository;
     private final AdminUserService adminUserService;
+    private final ExistChecker checker;
 
     @Override
     public List<UserEventRequestDto> getEventRequests(Long userId, Long eventId) {
+        checker.isEventExists(eventId);
+        checker.isUserExist(userId);
         EventResponse event = eventService.getEvent(eventId);
         if (event.getInitiator().getId() == userId) {
             List<UserEventRequestEntity> eventRequestEntities = repository.findAllByEventId(eventId)
@@ -45,6 +51,7 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
     @Override
     public EventRequestStatusUpdateResult approveRequests(
             Long userId, Long eventId, ApproveRequestCriteria criteria) {
+        checker.isUserExist(userId);
         EventEntity event = eventService.getEventEntity(eventId);
         if (event.getRequestModeration().equals(Boolean.FALSE)) {
             throw new IllegalArgumentException("Event doesn't have moderation");
@@ -84,6 +91,10 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
 
     @Override
     public List<UserEventRequestDto> getUserRequests(Long userId) {
+        boolean existsById = repository.existsById(userId);
+        if (!existsById) {
+            throw new NotExistException("User not exist");
+        }
         List<UserEventRequestEntity> eventRequestEntities =
                 repository.findAllByUserId(userId);
         return eventRequestEntities.stream()
@@ -93,6 +104,11 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
 
     @Override
     public UserEventRequestDto createRequest(Long userId, Long eventId) {
+        boolean existed = repository.existsByRequesterIdAndEventId(userId, eventId);
+        if (existed) {
+            throw new AlreadyExistException("User already have request" +
+                    "for this event");
+        }
         EventEntity entity = eventService.getEventEntity(eventId);
         UserEntity userEntity = adminUserService.findUserEntity(userId);
         UserEventRequestEntity eventRequestEntity = UserEventRequestEntity.builder()
@@ -106,7 +122,9 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
     }
 
     @Override
-    public UserEventRequestDto cancelRequest(Long userId, Integer requestId) {
+    public UserEventRequestDto cancelRequest(Long userId, Long requestId) {
+        checker.isUserExist(userId);
+        checker.isRequestExists(requestId);
         UserEventRequestEntity entity = repository.findByIdAndByUserId(requestId, userId)
                 .orElseThrow(() -> new NotExistException("Request does not found"));
         entity.setStatus("CANCELED");

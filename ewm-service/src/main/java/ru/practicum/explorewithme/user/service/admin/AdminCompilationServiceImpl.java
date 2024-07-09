@@ -28,6 +28,10 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
     @Override
     public void deleteCompilationById(Integer compId) {
+        boolean existsById = repository.existsById(compId);
+        if (!existsById) {
+            throw new NotExistException("This compilation not exist");
+        }
         repository.deleteById(compId);
     }
 

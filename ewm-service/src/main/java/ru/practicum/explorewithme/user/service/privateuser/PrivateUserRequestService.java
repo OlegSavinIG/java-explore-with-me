@@ -15,5 +15,5 @@ public interface PrivateUserRequestService {
 
     UserEventRequestDto createRequest(Long userId, Long eventId);
 
-    UserEventRequestDto cancelRequest(Long userId, Integer requestId);
+    UserEventRequestDto cancelRequest(Long userId, Long requestId);
 }

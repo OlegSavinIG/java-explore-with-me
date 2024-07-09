@@ -16,6 +16,7 @@ import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.exception.NotExistException;
+import ru.practicum.explorewithme.exists.ExistChecker;
 import ru.practicum.explorewithme.user.model.UserEntity;
 import ru.practicum.explorewithme.user.service.admin.AdminUserService;
 
@@ -29,9 +30,11 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
     private final EventRepository repository;
     private final AdminUserService adminUserService;
     private final CategoryService categoryService;
+    private final ExistChecker checker;
 
     @Override
     public List<EventResponse> getEventsByUserId(Long userId, Integer from, Integer size) {
+        checker.isUserExist(userId);
         Pageable pageable = PageRequest.of(from / size, size);
         Page<EventEntity> eventEntities = repository.findAllByUserId(userId, pageable)
                 .orElseThrow(() -> new NotExistException("This user does not have events"));
@@ -42,6 +45,8 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
 
     @Override
     public EventResponse getByUserIdAndEventId(Long userId, Long eventId) {
+        checker.isUserExist(userId);
+        checker.isEventExists(eventId);
         EventEntity entity = repository.findByEventIdAndUserId(eventId, userId)
                 .orElseThrow(() -> new NotExistException("This event does not exist"));
         return EventMapper.toResponse(entity);
@@ -49,6 +54,7 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
 
     @Override
     public EventResponse createEvent(EventRequest request, Long userId) {
+        checker.isUserExist(userId);
         UserEntity userEntity = adminUserService.findUserEntity(userId);
         CategoryResponse category = categoryService.getCategory(request.getCategory());
         EventEntity eventEntity = repository
@@ -61,6 +67,8 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
     @Transactional
     @Override
     public EventResponse updateEvent(Long userId, Long eventId, EventRequest request) {
+        checker.isUserExist(userId);
+        checker.isEventExists(eventId);
         EventEntity entity = repository.findByEventIdAndUserId(eventId, userId)
                 .orElseThrow(() -> new NotExistException("This event does not exist"));
 

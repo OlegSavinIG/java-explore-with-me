@@ -14,8 +14,8 @@ import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.event.spicification.EventSpecification;
-import ru.practicum.explorewithme.exception.EventNotFoundException;
 import ru.practicum.explorewithme.exception.InvalidEventStateException;
+import ru.practicum.explorewithme.exception.NotExistException;
 import ru.practicum.explorewithme.user.model.EventSearchCriteriaForAdmin;
 import ru.practicum.explorewithme.user.repository.AdminEventRepository;
 
@@ -64,7 +64,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     @Override
     public EventResponse approveEvent(EventRequest request, Long eventId) {
         EventEntity event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new EventNotFoundException(
+                .orElseThrow(() -> new NotExistException(
                         "Event with id=" + eventId + " was not found"));
         if (request.getAnnotation() != null) {
             event.setAnnotation(request.getAnnotation());

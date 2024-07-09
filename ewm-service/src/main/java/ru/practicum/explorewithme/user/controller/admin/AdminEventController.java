@@ -8,6 +8,8 @@ import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.user.model.EventSearchCriteriaForAdmin;
 import ru.practicum.explorewithme.user.service.admin.AdminEventService;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController("/admin")
@@ -18,8 +20,8 @@ public class AdminEventController {
     @GetMapping("/events")
     public ResponseEntity<List<EventResponse>> getEvents(
             @ModelAttribute EventSearchCriteriaForAdmin criteria,
-            @RequestParam(defaultValue = "0") Integer from,
-            @RequestParam(defaultValue = "10") Integer size
+            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+            @Positive @RequestParam(defaultValue = "10") Integer size
     ) {
         return ResponseEntity.ok(service.getEvents(criteria, from, size));
     }
