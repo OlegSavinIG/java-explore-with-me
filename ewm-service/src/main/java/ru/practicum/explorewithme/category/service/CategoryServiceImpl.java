@@ -35,4 +35,10 @@ public class CategoryServiceImpl implements CategoryService {
                         .orElseThrow(() -> new NotExistException("This category does not exist"));
         return CategoryMapper.toResponse(categoryEntity);
     }
+
+    @Override
+    public CategoryEntity getCategoryEntity(Integer catId) {
+        return repository.findById(catId)
+                .orElseThrow(() -> new NotExistException("This category does not exist"));
+    }
 }

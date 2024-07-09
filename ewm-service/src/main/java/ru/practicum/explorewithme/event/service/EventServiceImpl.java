@@ -74,4 +74,10 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public EventEntity getEventEntity(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotExistException("Event does not exist"));
+    }
 }

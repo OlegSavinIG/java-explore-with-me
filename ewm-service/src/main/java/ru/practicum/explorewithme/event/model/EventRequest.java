@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.explorewithme.annotation.DefaultValidation;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,17 +16,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventRequest {
-    @NotNull
-    @NotBlank
+    @NotNull(groups = DefaultValidation.class)
+    @NotBlank(groups = DefaultValidation.class)
     private String annotation;
-    @NotNull
-    @NotBlank
+
+    @NotNull(groups = DefaultValidation.class)
+    @NotBlank(groups = DefaultValidation.class)
     private String description;
-    @NotNull
-    @NotBlank
+
+    @NotNull(groups = DefaultValidation.class)
+    @NotBlank(groups = DefaultValidation.class)
     private String title;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
+
     private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;

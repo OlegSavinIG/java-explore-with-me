@@ -56,4 +56,10 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .orElseThrow(() -> new NotExistException("User does not exist"));
         return UserMapper.toResponse(userEntity);
     }
+
+    @Override
+    public UserEntity findUserEntity(Long userId) {
+        return repository.findById(userId)
+                .orElseThrow(() -> new NotExistException("User does not exist") );
+    }
 }

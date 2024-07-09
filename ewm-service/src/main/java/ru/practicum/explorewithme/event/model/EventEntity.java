@@ -38,7 +38,7 @@ public class EventEntity {
     private int views;
     private int confirmedRequests;
     private int participantLimit;
-    private boolean requestModeration;
+    private Boolean requestModeration;
     private String state;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

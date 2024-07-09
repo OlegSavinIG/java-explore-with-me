@@ -115,6 +115,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                             "Invalid state action: " + request.getStateAction());
             }
         }
+        event.setPublishedOn(LocalDateTime.now());
         eventRepository.save(event);
         return EventMapper.toResponse(event);
     }

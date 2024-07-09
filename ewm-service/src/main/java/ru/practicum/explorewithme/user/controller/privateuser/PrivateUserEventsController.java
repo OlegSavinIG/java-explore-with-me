@@ -2,7 +2,9 @@ package ru.practicum.explorewithme.user.controller.privateuser;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.explorewithme.annotation.DefaultValidation;
 import ru.practicum.explorewithme.event.model.EventRequest;
 import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.user.service.privateuser.PrivateUserEventsService;
@@ -25,7 +27,7 @@ public class PrivateUserEventsController {
     }
 
     @GetMapping("/{userId}/events/{eventId}")
-    public ResponseEntity<List<EventResponse>> getByUserIdAndEventId(
+    public ResponseEntity<EventResponse> getByUserIdAndEventId(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
         return ResponseEntity.ok(service.getByUserIdAndEventId(userId, eventId));
@@ -35,7 +37,7 @@ public class PrivateUserEventsController {
     @PostMapping("/{userId}/events")
     public ResponseEntity<EventResponse> createEvent(
             @PathVariable Long userId,
-            @RequestBody EventRequest request
+           @Validated(DefaultValidation.class) @RequestBody EventRequest request
     ) {
         return ResponseEntity.ok(service.createEvent(request, userId));
     }
@@ -45,7 +47,7 @@ public class PrivateUserEventsController {
             @PathVariable Long userId,
             @PathVariable Long eventId,
             @RequestBody EventRequest request) {
-        return ResponseEntity.ok(service.updateEntity(userId, eventId, request));
+        return ResponseEntity.ok(service.updateEvent(userId, eventId, request));
     }
 
 

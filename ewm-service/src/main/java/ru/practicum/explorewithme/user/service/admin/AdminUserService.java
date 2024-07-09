@@ -1,5 +1,6 @@
 package ru.practicum.explorewithme.user.service.admin;
 
+import ru.practicum.explorewithme.user.model.UserEntity;
 import ru.practicum.explorewithme.user.model.UserRequest;
 import ru.practicum.explorewithme.user.model.UserResponse;
 
@@ -15,4 +16,5 @@ public interface AdminUserService {
 
     void deleteUserById(Long userId);
     UserResponse findById(Long userId);
+    UserEntity findUserEntity(Long userId);
 }

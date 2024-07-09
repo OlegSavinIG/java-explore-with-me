@@ -8,4 +8,8 @@ import java.util.Optional;
 
 public interface RequestRepository extends JpaRepository<UserEventRequestEntity, Long> {
     Optional<List<UserEventRequestEntity>> findAllByEventId(Long eventId);
+
+    List<UserEventRequestEntity> findAllByUserId(Long userId);
+
+    Optional<UserEventRequestEntity> findByIdAndByUserId(Integer requestId, Long userId);
 }

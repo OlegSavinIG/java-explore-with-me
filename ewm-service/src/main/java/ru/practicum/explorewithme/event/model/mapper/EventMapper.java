@@ -8,6 +8,7 @@ import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventRequest;
 import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.model.EventStatus;
+import ru.practicum.explorewithme.user.model.UserEntity;
 import ru.practicum.explorewithme.user.model.UserRequest;
 import ru.practicum.explorewithme.user.model.mapper.UserMapper;
 
@@ -33,7 +34,8 @@ public class EventMapper {
                 .build();
     }
 
-    public static EventEntity toEntity(EventRequest request, CategoryEntity category) {
+    public static EventEntity toEntity(
+            EventRequest request, CategoryEntity category, UserEntity user) {
         return EventEntity.builder()
                 .annotation(request.getAnnotation())
                 .category(category)
@@ -41,7 +43,10 @@ public class EventMapper {
                 .state(request.getStateAction())
                 .title(request.getTitle())
                 .eventDate(request.getEventDate())
-
-                .build()
+                .initiator(user)
+                .description(request.getDescription())
+                .participantLimit(request.getParticipantLimit())
+                .requestModeration(request.getRequestModeration())
+                .build();
     }
 }
