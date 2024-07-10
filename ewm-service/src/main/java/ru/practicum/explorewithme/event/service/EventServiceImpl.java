@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
+import ru.practicum.explorewithme.event.model.EventResponseShort;
 import ru.practicum.explorewithme.event.model.EventSearchCriteria;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
@@ -25,7 +26,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository repository;
 
     @Override
-    public List<EventResponse> getEvents(EventSearchCriteria criteria, Integer from, Integer size) {
+    public List<EventResponseShort> getEvents(EventSearchCriteria criteria, Integer from, Integer size) {
         Specification<EventEntity> spec = Specification.where(null);
 
         if (!criteria.getCategories().isEmpty() || criteria.getCategories() != null) {
@@ -53,7 +54,7 @@ public class EventServiceImpl implements EventService {
         Pageable pageable = PageRequest.of(from / size, size, sort);
         Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
         return eventEntities.stream()
-                .map(EventMapper::toResponse)
+                .map(EventMapper::toResponseShort)
                 .collect(Collectors.toList());
     }
 

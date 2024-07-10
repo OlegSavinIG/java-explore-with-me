@@ -4,10 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
 import ru.practicum.explorewithme.category.model.mapper.CategoryMapper;
-import ru.practicum.explorewithme.event.model.EventEntity;
-import ru.practicum.explorewithme.event.model.EventRequest;
-import ru.practicum.explorewithme.event.model.EventResponse;
-import ru.practicum.explorewithme.event.model.EventStatus;
+import ru.practicum.explorewithme.event.model.*;
 import ru.practicum.explorewithme.user.model.UserEntity;
 import ru.practicum.explorewithme.user.model.mapper.UserMapper;
 
@@ -30,6 +27,20 @@ public class EventMapper {
                 .participantLimit(entity.getParticipantLimit())
                 .publishedOn(entity.getPublishedOn())
                 .requestModeration(entity.getRequestModeration())
+                .build();
+    }
+
+    public static EventResponseShort toResponseShort(EventEntity entity) {
+        return EventResponseShort.builder()
+                .id(entity.getId())
+                .annotation(entity.getAnnotation())
+                .category(entity.getCategory())
+                .eventDate(entity.getEventDate())
+                .confirmedRequests(entity.getConfirmedRequests())
+                .title(entity.getTitle())
+                .views(entity.getViews())
+                .paid(entity.isPaid())
+                .initiator(UserMapper.toResponseWithEvent(entity.getInitiator()))
                 .build();
     }
 

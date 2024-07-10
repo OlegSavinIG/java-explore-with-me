@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
 
 import javax.persistence.*;
@@ -21,7 +22,11 @@ public class CompilationEntity {
     private Integer id;
     private String title;
     private Boolean pinned;
-    @OneToMany
-    @JoinColumn(name = "event_id")
-    private List<EventResponse> events;
+    @ManyToMany
+    @JoinTable(
+            name = "compilation_events",
+            joinColumns = @JoinColumn(name = "compilation_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
+    private List<EventEntity> events;
 }

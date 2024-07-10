@@ -25,20 +25,6 @@ services:
     ports:
       - "5433:5432"
 
-  ewm-service:
-    container_name: ewm-service
-    build:
-      context: ./ewm-service
-      dockerfile: Dockerfile
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-main:5432/main_db
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-    depends_on:
-      - postgres-main
-    ports:
-      - "9090:9090"
-
   stats-server:
     container_name: stats-server
     build:
@@ -48,23 +34,27 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stat:5432/stat_db
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
+      EWM_SERVICE_URL: http://ewm-service:9090  # URL для взаимодействия с ewm-service
     depends_on:
       - postgres-stat
     ports:
       - "8081:8080"
 
-  stats-client:
-    container_name: stats-client
+  ewm-service:
+    container_name: ewm-service
     build:
-      context: ./stats-service/stats-client
+      context: ./ewm-service
       dockerfile: Dockerfile
-    depends_on:
-      - stats-server
     environment:
-      SERVER_URL: http://http-server:8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-main:5432/main_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      STATS_SERVER_URL: http://stats-server:8081  # URL для взаимодействия с stats-server
+    depends_on:
+      - postgres-main
+      - stats-server  # Обеспечить, что stats-server запущен перед ewm-service
     ports:
-      - "8082:8080"
-
+      - "9090:9090"
 
 volumes:
   postgres-main-data:
