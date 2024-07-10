@@ -10,7 +10,8 @@ import ru.practicum.explorewithme.user.service.privateuser.PrivateUserRequestSer
 
 import java.util.List;
 
-@RestController("/users")
+@RestController
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class PrivateUserRequestController {
     private final PrivateUserRequestService service;

@@ -13,7 +13,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
-@RestController("/users")
+@RestController
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class PrivateUserEventsController {
     private final PrivateUserEventsService service;

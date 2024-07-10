@@ -13,7 +13,7 @@ import ru.practicum.explorewithme.event.model.EventResponseShort;
 import ru.practicum.explorewithme.event.model.EventSearchCriteria;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
-import ru.practicum.explorewithme.event.spicification.EventSpecification;
+import ru.practicum.explorewithme.event.specification.EventSpecification;
 import ru.practicum.explorewithme.exception.NotExistException;
 
 import java.util.Collections;
@@ -29,13 +29,13 @@ public class EventServiceImpl implements EventService {
     public List<EventResponseShort> getEvents(EventSearchCriteria criteria, Integer from, Integer size) {
         Specification<EventEntity> spec = Specification.where(null);
 
-        if (!criteria.getCategories().isEmpty() || criteria.getCategories() != null) {
+        if (criteria.getCategories() != null && !criteria.getCategories().isEmpty()) {
             spec = spec.and(EventSpecification.hasCategories(criteria.getCategories()));
         }
         spec = spec.and(EventSpecification.dateAfter(criteria.getRangeStart()));
 
         spec = spec.and(EventSpecification.dateBefore(criteria.getRangeEnd()));
-        if (!criteria.getText().isEmpty() || criteria.getText() != null) {
+        if (criteria.getText() != null && !criteria.getText().isEmpty()) {
             spec = spec.and(EventSpecification.containsText(criteria.getText()));
         }
         if (Boolean.TRUE.equals(criteria.getOnlyAvailable())) {
@@ -45,10 +45,10 @@ public class EventServiceImpl implements EventService {
             spec = spec.and(EventSpecification.isPaid(criteria.getPaid()));
         }
         Sort sort = Sort.unsorted();
-        if (criteria.getSort().equalsIgnoreCase("EVENT_DATE")) {
+        if ("EVENT_DATE".equalsIgnoreCase(criteria.getSort())) {
             sort = Sort.by(Sort.Direction.ASC, "eventDate");
         }
-        if (criteria.getSort().equalsIgnoreCase("VIEWS")) {
+        if ("VIEWS".equalsIgnoreCase(criteria.getSort())) {
             sort = Sort.by(Sort.Direction.DESC, "views");
         }
         Pageable pageable = PageRequest.of(from / size, size, sort);
@@ -80,5 +80,8 @@ public class EventServiceImpl implements EventService {
     public EventEntity getEventEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotExistException("Event does not exist"));
+    }
+    public List<EventEntity> getEventEntities(List<Long> ids) {
+        return repository.findAllById(ids);
     }
 }

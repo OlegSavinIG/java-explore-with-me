@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.client;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StatisticClient {
     /**
      * Client for handling statistics via web client.
@@ -24,6 +26,8 @@ public class StatisticClient {
                 .uri("/external-service-endpoint")
                 .bodyValue(statistics)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .doOnSuccess(response -> log.info("Successfully sent statistics to external service"))
+                .doOnError(error -> log.error("Failed to send statistics to external service", error));
     }
 }

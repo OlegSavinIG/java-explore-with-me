@@ -2,10 +2,7 @@ package ru.practicum.explorewithme.event.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
 import ru.practicum.explorewithme.user.model.UserEntity;
 
@@ -18,6 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "events")
+@ToString(exclude = {"category", "initiator"})
 public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

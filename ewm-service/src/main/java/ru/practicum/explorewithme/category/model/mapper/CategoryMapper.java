@@ -9,7 +9,10 @@ import ru.practicum.explorewithme.category.model.CategoryResponse;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CategoryMapper {
     public static CategoryResponse toResponse(CategoryEntity categoryEntity) {
-        return CategoryResponse.builder().build();
+        return CategoryResponse.builder()
+                .id(categoryEntity.getId())
+                .name(categoryEntity.getName())
+                .build();
     }
 
     public static CategoryEntity toEntity(CategoryResponse category) {

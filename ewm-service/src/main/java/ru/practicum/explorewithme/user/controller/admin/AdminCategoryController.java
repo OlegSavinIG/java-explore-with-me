@@ -9,7 +9,8 @@ import ru.practicum.explorewithme.user.service.admin.AdminCategoryService;
 
 import javax.validation.Valid;
 
-@RestController("/admin")
+@RestController
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminCategoryController {
     private final AdminCategoryService service;

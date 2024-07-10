@@ -13,7 +13,8 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 import java.util.List;
 
-@RestController("/admin")
+@RestController
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminUserController {
 

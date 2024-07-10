@@ -1,9 +1,6 @@
 package ru.practicum.explorewithme.compilation.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
 
@@ -16,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "compilations")
+@ToString(exclude = "events")
 public class CompilationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

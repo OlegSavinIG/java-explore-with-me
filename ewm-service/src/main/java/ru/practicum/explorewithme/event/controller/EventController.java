@@ -14,7 +14,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
-@RestController("/events")
+@RestController
+@RequestMapping("/events")
 @RequiredArgsConstructor
 public class EventController {
     private final EventService service;

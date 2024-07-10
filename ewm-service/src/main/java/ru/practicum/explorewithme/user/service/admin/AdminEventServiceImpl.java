@@ -13,7 +13,7 @@ import ru.practicum.explorewithme.event.model.EventRequest;
 import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
-import ru.practicum.explorewithme.event.spicification.EventSpecification;
+import ru.practicum.explorewithme.event.specification.EventSpecification;
 import ru.practicum.explorewithme.exception.InvalidEventStateException;
 import ru.practicum.explorewithme.exception.NotExistException;
 import ru.practicum.explorewithme.user.model.EventSearchCriteriaForAdmin;
@@ -94,29 +94,32 @@ public class AdminEventServiceImpl implements AdminEventService {
             event.setTitle(request.getTitle());
         }
         if (request.getStateAction() != null) {
-            switch (request.getStateAction()) {
-                case "PUBLISH_EVENT":
-                    if (!"PENDING".equals(event.getState())) {
-                        throw new InvalidEventStateException(
-                                "Cannot publish the event because it's not in the right state: " + event.getState());
-                    }
-                    event.setState("PUBLISHED");
-                    event.setPublishedOn(LocalDateTime.now());
-                    break;
-                case "REJECT_EVENT":
-                    if ("PUBLISHED".equals(event.getState())) {
-                        throw new InvalidEventStateException(
-                                "Cannot reject the event because it's already published");
-                    }
-                    event.setState("REJECTED");
-                    break;
-                default:
-                    throw new IllegalArgumentException(
-                            "Invalid state action: " + request.getStateAction());
-            }
+            handleStateAction(request.getStateAction(), event);
         }
-        event.setPublishedOn(LocalDateTime.now());
+
         eventRepository.save(event);
         return EventMapper.toResponse(event);
+    }
+
+    private void handleStateAction(String stateAction, EventEntity event) {
+        switch (stateAction) {
+            case "PUBLISH_EVENT":
+                if (!"PENDING".equals(event.getState())) {
+                    throw new InvalidEventStateException(
+                            "Cannot publish the event because it's not in the right state: " + event.getState());
+                }
+                event.setState("PUBLISHED");
+                event.setPublishedOn(LocalDateTime.now());
+                break;
+            case "REJECT_EVENT":
+                if ("PUBLISHED".equals(event.getState())) {
+                    throw new InvalidEventStateException(
+                            "Cannot reject the event because it's already published");
+                }
+                event.setState("REJECTED");
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid state action: " + stateAction);
+        }
     }
 }

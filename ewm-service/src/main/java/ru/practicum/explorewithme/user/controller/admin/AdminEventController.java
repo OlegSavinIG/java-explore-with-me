@@ -12,7 +12,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
-@RestController("/admin")
+@RestController
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminEventController {
     private final AdminEventService service;

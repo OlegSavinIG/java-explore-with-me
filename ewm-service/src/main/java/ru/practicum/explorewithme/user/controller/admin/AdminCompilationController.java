@@ -9,7 +9,8 @@ import ru.practicum.explorewithme.user.service.admin.AdminCompilationService;
 
 import javax.validation.Valid;
 
-@RestController("/admin")
+@RestController
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminCompilationController {
 

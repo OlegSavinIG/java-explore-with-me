@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.event.spicification;
+package ru.practicum.explorewithme.event.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import ru.practicum.explorewithme.event.model.EventEntity;
@@ -33,9 +33,9 @@ public class EventSpecification {
     public static Specification<EventEntity> dateBefore(LocalDateTime rangeEnd) {
         return (root, query, criteriaBuilder) -> {
             if (rangeEnd == null) {
-                return criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), LocalDateTime.now());
+                return criteriaBuilder.lessThanOrEqualTo(root.get("eventDate"), LocalDateTime.now());
             }
-            return criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), rangeEnd);
+            return criteriaBuilder.lessThanOrEqualTo(root.get("eventDate"), rangeEnd);
         };
     }
 

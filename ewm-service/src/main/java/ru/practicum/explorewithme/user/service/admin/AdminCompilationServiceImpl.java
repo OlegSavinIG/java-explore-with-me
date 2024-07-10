@@ -6,12 +6,15 @@ import ru.practicum.explorewithme.compilation.model.CompilationEntity;
 import ru.practicum.explorewithme.compilation.model.CompilationMapper;
 import ru.practicum.explorewithme.compilation.model.CompilationRequest;
 import ru.practicum.explorewithme.compilation.model.CompilationResponse;
+import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
+import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.service.EventService;
 import ru.practicum.explorewithme.exception.NotExistException;
 import ru.practicum.explorewithme.user.repository.AdminCompilationRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,9 +49,9 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         if (request.getTitle() != null) {
             entity.setTitle(request.getTitle());
         }
-        if (request.getEvents() != null || !request.getEvents().isEmpty()) {
-            List<EventResponse> eventsByIds =
-                    eventService.getEventsByIds(request.getEvents());
+        if (request.getEvents() != null && !request.getEvents().isEmpty()) {
+            List<EventEntity> eventsByIds =
+                    eventService.getEventEntities(request.getEvents());
             entity.setEvents(eventsByIds);
         }
         repository.save(entity);
