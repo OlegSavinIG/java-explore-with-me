@@ -2,7 +2,6 @@ package ru.practicum.explorewithme.user.service.privateuser;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.repository.EventRepository;
@@ -96,7 +95,7 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
             throw new NotExistException("User not exist");
         }
         List<UserEventRequestEntity> eventRequestEntities =
-                repository.findAllByUserId(userId);
+                repository.findAllByRequesterId(userId);
         return eventRequestEntities.stream()
                 .map(UserEvenRequestMapper::toDto)
                 .collect(Collectors.toList());
@@ -125,7 +124,7 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
     public UserEventRequestDto cancelRequest(Long userId, Long requestId) {
         checker.isUserExist(userId);
         checker.isRequestExists(requestId);
-        UserEventRequestEntity entity = repository.findByIdAndByUserId(requestId, userId)
+        UserEventRequestEntity entity = repository.findByIdAndRequesterId(requestId, userId)
                 .orElseThrow(() -> new NotExistException("Request does not found"));
         entity.setStatus("CANCELED");
         repository.delete(entity);

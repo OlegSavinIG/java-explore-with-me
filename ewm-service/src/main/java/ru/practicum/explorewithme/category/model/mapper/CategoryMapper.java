@@ -21,6 +21,7 @@ public class CategoryMapper {
                 .name(category.getName())
                 .build();
     }
+
     public static CategoryEntity toEntity(CategoryRequest category) {
         return CategoryEntity.builder()
                 .name(category.getName())

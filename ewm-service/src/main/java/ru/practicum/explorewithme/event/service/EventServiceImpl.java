@@ -81,6 +81,7 @@ public class EventServiceImpl implements EventService {
         return repository.findById(id)
                 .orElseThrow(() -> new NotExistException("Event does not exist"));
     }
+
     public List<EventEntity> getEventEntities(List<Long> ids) {
         return repository.findAllById(ids);
     }

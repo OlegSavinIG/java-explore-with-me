@@ -17,4 +17,5 @@ public class CompilationResponse {
     private String title;
     private Boolean pinned;
     private List<EventResponse> events;
+
 }

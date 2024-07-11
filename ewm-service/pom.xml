@@ -18,6 +18,7 @@
     </properties>
 
     <dependencies>
+
     </dependencies>
 
     <build>
@@ -29,6 +30,7 @@
                     <mainClass>ru.practicum.explorewithme.ExploreWithMeApp</mainClass>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>

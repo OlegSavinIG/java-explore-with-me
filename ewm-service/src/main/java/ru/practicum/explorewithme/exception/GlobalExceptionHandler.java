@@ -7,7 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
@@ -38,6 +37,7 @@ public class GlobalExceptionHandler {
         errorResponse.put("timestamp", LocalDateTime.now().toString());
         return ResponseEntity.badRequest().body(errorResponse);
     }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
@@ -47,6 +47,7 @@ public class GlobalExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler(NotExistException.class)
     public ResponseEntity<Object> handleNotExistException(NotExistException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
@@ -56,6 +57,7 @@ public class GlobalExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(AlreadyExistException.class)
     public ResponseEntity<Object> handleAlreadyExistException(AlreadyExistException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();

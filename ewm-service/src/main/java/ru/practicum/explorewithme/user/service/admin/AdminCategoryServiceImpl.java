@@ -14,6 +14,7 @@ import ru.practicum.explorewithme.exists.ExistChecker;
 public class AdminCategoryServiceImpl implements AdminCategoryService {
     private final CategoryRepository repository;
     private final ExistChecker checker;
+
     @Override
     public void deleteCategory(Integer catId) {
         checker.isCategoryExists(catId);

@@ -10,6 +10,6 @@ import ru.practicum.explorewithme.user.model.UserEntity;
 import java.util.List;
 
 public interface AdminUserRepository extends JpaRepository<UserEntity, Long> {
-    @Query("SELECT u FROM User u WHERE u.id IN :ids")
+    @Query("SELECT u FROM UserEntity u WHERE u.id IN :ids")
     Page<UserEntity> findByIdIn(@Param("ids") List<Long> ids, Pageable pageable);
 }

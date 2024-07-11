@@ -36,7 +36,7 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
     public List<EventResponse> getEventsByUserId(Long userId, Integer from, Integer size) {
         checker.isUserExist(userId);
         Pageable pageable = PageRequest.of(from / size, size);
-        Page<EventEntity> eventEntities = repository.findAllByUserId(userId, pageable)
+        Page<EventEntity> eventEntities = repository.findAllByInitiatorId(userId, pageable)
                 .orElseThrow(() -> new NotExistException("This user does not have events"));
         return eventEntities.stream()
                 .map(EventMapper::toResponse)
@@ -47,7 +47,7 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
     public EventResponse getByUserIdAndEventId(Long userId, Long eventId) {
         checker.isUserExist(userId);
         checker.isEventExists(eventId);
-        EventEntity entity = repository.findByEventIdAndUserId(eventId, userId)
+        EventEntity entity = repository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotExistException("This event does not exist"));
         return EventMapper.toResponse(entity);
     }
@@ -69,7 +69,7 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
     public EventResponse updateEvent(Long userId, Long eventId, EventRequest request) {
         checker.isUserExist(userId);
         checker.isEventExists(eventId);
-        EventEntity entity = repository.findByEventIdAndUserId(eventId, userId)
+        EventEntity entity = repository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotExistException("This event does not exist"));
 
         if (request.getTitle() != null) {

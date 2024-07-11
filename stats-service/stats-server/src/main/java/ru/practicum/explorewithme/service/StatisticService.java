@@ -1,7 +1,6 @@
 package ru.practicum.explorewithme.service;
 
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 

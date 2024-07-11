@@ -1,8 +1,10 @@
 package ru.practicum.explorewithme.compilation.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.event.model.EventEntity;
-import ru.practicum.explorewithme.event.model.EventResponse;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "compilations")
-@ToString(exclude = "events")
 public class CompilationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +28,5 @@ public class CompilationEntity {
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     private List<EventEntity> events;
+
 }

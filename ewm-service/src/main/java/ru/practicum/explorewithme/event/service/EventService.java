@@ -15,5 +15,6 @@ public interface EventService {
     EventEntity getEventEntity(Long id);
 
     List<EventResponse> getEventsByIds(List<Long> ids);
+
     List<EventEntity> getEventEntities(List<Long> ids);
 }
