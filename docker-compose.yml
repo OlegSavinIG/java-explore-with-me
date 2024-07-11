@@ -50,6 +50,7 @@ services:
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
       STATS_SERVER_URL: http://stats-server:8081  # URL для взаимодействия с stats-server
+      SERVER_URL: http://stats-server:8081  # URL для использования в RestTemplate
     depends_on:
       - postgres-main
       - stats-server  # Обеспечить, что stats-server запущен перед ewm-service

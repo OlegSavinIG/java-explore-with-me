@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.user.service.admin;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AdminEventServiceImpl implements AdminEventService {
     private final AdminEventRepository repository;
     private final EventRepository eventRepository;
@@ -33,6 +35,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     @Override
     public List<EventResponse> getEvents(
             EventSearchCriteriaForAdmin criteria, Integer from, Integer size) {
+        log.info("Fetching events with criteria: {}", criteria);
         Pageable pageable = PageRequest.of(from / size, size);
         Specification<EventEntity> spec = Specification.where(null);
 
@@ -56,13 +59,16 @@ public class AdminEventServiceImpl implements AdminEventService {
             spec = spec.and(EventSpecification.dateBefore(criteria.getRangeEnd()));
         }
         Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
-        return eventEntities.stream()
+        List<EventResponse> response = eventEntities.stream()
                 .map(EventMapper::toResponse)
                 .collect(Collectors.toList());
+        log.info("Fetched {} events", response.size());
+        return response;
     }
 
     @Override
     public EventResponse approveEvent(EventRequest request, Long eventId) {
+        log.info("Approving event with id: {}", eventId);
         EventEntity event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotExistException(
                         "Event with id=" + eventId + " was not found"));
@@ -98,6 +104,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         }
 
         eventRepository.save(event);
+        log.info("Approved event with id: {}", eventId);
         return EventMapper.toResponse(event);
     }
 
@@ -105,6 +112,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         switch (stateAction) {
             case "PUBLISH_EVENT":
                 if (!"PENDING".equals(event.getState())) {
+                    log.info("Cannot publish the event because it's not in the right state: {}", event.getState());
                     throw new InvalidEventStateException(
                             "Cannot publish the event because it's not in the right state: " + event.getState());
                 }
@@ -113,12 +121,14 @@ public class AdminEventServiceImpl implements AdminEventService {
                 break;
             case "REJECT_EVENT":
                 if ("PUBLISHED".equals(event.getState())) {
+                    log.info("Cannot reject the event because it's already published");
                     throw new InvalidEventStateException(
                             "Cannot reject the event because it's already published");
                 }
                 event.setState("REJECTED");
                 break;
             default:
+                log.info("Invalid state action: {}", stateAction);
                 throw new IllegalArgumentException("Invalid state action: " + stateAction);
         }
     }

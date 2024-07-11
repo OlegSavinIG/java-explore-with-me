@@ -12,15 +12,15 @@ import java.util.List;
 @Repository
 public interface StatisticRepository extends JpaRepository<StatisticEntity, Long> {
 
-    @Query("SELECT s FROM StatisticEntity s WHERE s.timestamp BETWEEN :start AND :end")
+    @Query("SELECT s FROM StatisticEntity s WHERE s.creationTime BETWEEN :start AND :end")
     List<StatisticEntity> findAllStatistic(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT s FROM StatisticEntity s WHERE s.timestamp BETWEEN :start AND :end AND s.uri IN :uris")
+    @Query("SELECT s FROM StatisticEntity s WHERE s.creationTime BETWEEN :start AND :end AND s.uri IN :uris")
     List<StatisticEntity> findAllStatisticByUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("uris") List<String> uris);
 
-    @Query("SELECT DISTINCT s.ip, s FROM StatisticEntity s WHERE s.timestamp BETWEEN :start AND :end")
+    @Query("SELECT s FROM StatisticEntity s WHERE s.creationTime BETWEEN :start AND :end GROUP BY s.ip, s.app, s.uri, s.creationTime")
     List<StatisticEntity> findAllStatisticWithUniqueIp(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT DISTINCT s.ip, s FROM StatisticEntity s WHERE s.timestamp BETWEEN :start AND :end AND s.uri IN :uris")
+    @Query("SELECT s FROM StatisticEntity s WHERE s.creationTime BETWEEN :start AND :end AND s.uri IN :uris GROUP BY s.ip, s.app, s.uri, s.creationTime")
     List<StatisticEntity> findAllStatisticByUrisWithUniqueIp(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("uris") List<String> uris);
 }
