@@ -1,19 +1,26 @@
 package ru.practicum.explorewithme.repository;
 
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
 import ru.practicum.explorewithme.StatisticEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Repository
-public interface StatisticRepository extends ReactiveCrudRepository<StatisticEntity, Long> {
-    Flux<StatisticEntity> findAllStatistic(LocalDateTime start, LocalDateTime end);
+public interface StatisticRepository extends JpaRepository<StatisticEntity, Long> {
 
-    Flux<StatisticEntity> findAllStatisticWithUniqueIp(LocalDateTime start, LocalDateTime end);
+    @Query("SELECT s FROM StatisticEntity s WHERE s.timestamp BETWEEN :start AND :end")
+    List<StatisticEntity> findAllStatistic(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    Flux<StatisticEntity> findAllStatisticByUris(LocalDateTime start, LocalDateTime end, List<String> uris);
+    @Query("SELECT s FROM StatisticEntity s WHERE s.timestamp BETWEEN :start AND :end AND s.uri IN :uris")
+    List<StatisticEntity> findAllStatisticByUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("uris") List<String> uris);
 
-    Flux<StatisticEntity> findAllStatisticByUrisWithUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
+    @Query("SELECT DISTINCT s.ip, s FROM StatisticEntity s WHERE s.timestamp BETWEEN :start AND :end")
+    List<StatisticEntity> findAllStatisticWithUniqueIp(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    @Query("SELECT DISTINCT s.ip, s FROM StatisticEntity s WHERE s.timestamp BETWEEN :start AND :end AND s.uri IN :uris")
+    List<StatisticEntity> findAllStatisticByUrisWithUniqueIp(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("uris") List<String> uris);
 }

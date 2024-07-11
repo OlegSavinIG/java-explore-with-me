@@ -1,6 +1,5 @@
 package ru.practicum.explorewithme.service;
 
-import reactor.core.publisher.Flux;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 
@@ -29,7 +28,7 @@ public interface StatisticService {
      * @param unique whether to count only unique hits
      * @return the list of statistics
      */
-    Flux<StatisticResponse> getStatistic(
+    List<StatisticResponse> getStatistic(
             LocalDateTime start,
             LocalDateTime end, List<String> uris, boolean unique);
 }
