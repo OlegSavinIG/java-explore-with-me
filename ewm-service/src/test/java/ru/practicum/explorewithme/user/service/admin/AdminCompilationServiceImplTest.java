@@ -1,15 +1,15 @@
 package ru.practicum.explorewithme.user.service.admin;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.explorewithme.compilation.model.*;
+import ru.practicum.explorewithme.compilation.model.CompilationEntity;
+import ru.practicum.explorewithme.compilation.model.CompilationMapper;
+import ru.practicum.explorewithme.compilation.model.CompilationRequest;
+import ru.practicum.explorewithme.compilation.model.CompilationResponse;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.service.EventService;
 import ru.practicum.explorewithme.exception.NotExistException;
@@ -17,6 +17,9 @@ import ru.practicum.explorewithme.user.repository.AdminCompilationRepository;
 
 import java.util.Collections;
 import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminCompilationServiceImplTest {

@@ -1,11 +1,5 @@
 package ru.practicum.explorewithme.user.service.admin;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,11 +9,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
 import ru.practicum.explorewithme.category.model.CategoryRequest;
 import ru.practicum.explorewithme.category.model.CategoryResponse;
-import ru.practicum.explorewithme.category.model.mapper.CategoryMapper;
 import ru.practicum.explorewithme.category.repository.CategoryRepository;
 import ru.practicum.explorewithme.exists.ExistChecker;
 
 import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminCategoryServiceImplTest {

@@ -13,7 +13,6 @@ import ru.practicum.explorewithme.exception.NotExistException;
 import ru.practicum.explorewithme.user.model.UserEntity;
 import ru.practicum.explorewithme.user.model.UserRequest;
 import ru.practicum.explorewithme.user.model.UserResponse;
-import ru.practicum.explorewithme.user.model.mapper.UserMapper;
 import ru.practicum.explorewithme.user.repository.AdminUserRepository;
 
 import java.util.Collection;

@@ -1,13 +1,15 @@
 package ru.practicum.explorewithme.model;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 
 /**
  * Mapper class for converting between StatisticEntity and DTOs.
  */
-//@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class StatisticMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class StatisticMapper {
 
     /**
      * Converts a StatisticRequest to a StatisticEntity.

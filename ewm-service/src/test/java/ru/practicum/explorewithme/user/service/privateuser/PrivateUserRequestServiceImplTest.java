@@ -11,20 +11,19 @@ import ru.practicum.explorewithme.event.model.EventRequest;
 import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.event.service.EventService;
-import ru.practicum.explorewithme.exception.AlreadyExistException;
-import ru.practicum.explorewithme.exception.NotExistException;
 import ru.practicum.explorewithme.exists.ExistChecker;
 import ru.practicum.explorewithme.user.model.UserEntity;
 import ru.practicum.explorewithme.user.model.UserResponseWithEvent;
 import ru.practicum.explorewithme.user.repository.RequestRepository;
-import ru.practicum.explorewithme.user.request.model.*;
+import ru.practicum.explorewithme.user.request.model.ApproveRequestCriteria;
+import ru.practicum.explorewithme.user.request.model.UserEventRequestDto;
+import ru.practicum.explorewithme.user.request.model.UserEventRequestEntity;
 import ru.practicum.explorewithme.user.service.admin.AdminUserService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -91,7 +90,7 @@ public class PrivateUserRequestServiceImplTest {
     @Test
     void testGetEventRequests() {
         when(repository.findAllByEventId(anyLong())).thenReturn(Optional.of(Collections.singletonList(requestEntity)));
-       when(eventService.getEvent(anyLong())).thenReturn(eventResponse);
+        when(eventService.getEvent(anyLong())).thenReturn(eventResponse);
 
         List<UserEventRequestDto> responses = service.getEventRequests(1L, 1L);
 

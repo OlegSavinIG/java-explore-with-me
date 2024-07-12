@@ -6,15 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.explorewithme.compilation.model.CompilationEntity;
 import ru.practicum.explorewithme.compilation.model.CompilationMapper;
 import ru.practicum.explorewithme.compilation.model.CompilationResponse;
 import ru.practicum.explorewithme.compilation.repository.CompilationRepository;
-import ru.practicum.explorewithme.exception.NotExistException;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
+import ru.practicum.explorewithme.exception.NotExistException;
 
 import java.util.Collections;
 import java.util.List;

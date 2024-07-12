@@ -2,10 +2,10 @@ package ru.practicum.explorewithme.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.explorewithme.model.StatisticEntity;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 import ru.practicum.explorewithme.client.StatisticClient;
+import ru.practicum.explorewithme.model.StatisticEntity;
 import ru.practicum.explorewithme.model.StatisticMapper;
 import ru.practicum.explorewithme.repository.StatisticRepository;
 
