@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.user.service.privateuser;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
     private final EventRepository repository;
     private final AdminUserService adminUserService;
@@ -34,39 +36,47 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
 
     @Override
     public List<EventResponse> getEventsByUserId(Long userId, Integer from, Integer size) {
+        log.info("Fetching events for user ID: {}, from: {}, size: {}", userId, from, size);
         checker.isUserExist(userId);
         Pageable pageable = PageRequest.of(from / size, size);
         Page<EventEntity> eventEntities = repository.findAllByInitiatorId(userId, pageable)
                 .orElseThrow(() -> new NotExistException("This user does not have events"));
-        return eventEntities.stream()
+        List<EventResponse> responses = eventEntities.stream()
                 .map(EventMapper::toResponse)
                 .collect(Collectors.toList());
+        log.info("Found {} events for user ID: {}", responses.size(), userId);
+        return responses;
     }
 
     @Override
     public EventResponse getByUserIdAndEventId(Long userId, Long eventId) {
+        log.info("Fetching event ID: {} for user ID: {}", eventId, userId);
         checker.isUserExist(userId);
         checker.isEventExists(eventId);
         EventEntity entity = repository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotExistException("This event does not exist"));
+        log.info("Found event ID: {} for user ID: {}", eventId, userId);
         return EventMapper.toResponse(entity);
     }
 
     @Override
+    @Transactional
     public EventResponse createEvent(EventRequest request, Long userId) {
+        log.info("Creating event for user ID: {} with request: {}", userId, request);
         checker.isUserExist(userId);
         UserEntity userEntity = adminUserService.findUserEntity(userId);
         CategoryResponse category = categoryService.getCategory(request.getCategory());
-        EventEntity eventEntity = repository
-                .save(EventMapper.toEntity(
-                        request, CategoryMapper.toEntity(category), userEntity));
+        EventEntity eventEntity = repository.save(
+                EventMapper.toEntity(request, CategoryMapper.toEntity(category), userEntity));
         eventEntity.setCreatedOn(LocalDateTime.now());
+        log.info("Event created with ID: {} for user ID: {}", eventEntity.getId(), userId);
         return EventMapper.toResponse(eventEntity);
     }
 
     @Transactional
     @Override
     public EventResponse updateEvent(Long userId, Long eventId, EventRequest request) {
+        log.info("Updating event ID: {} for user ID: {} with request: {}", eventId, userId, request);
         checker.isUserExist(userId);
         checker.isEventExists(eventId);
         EventEntity entity = repository.findByIdAndInitiatorId(eventId, userId)
@@ -102,7 +112,7 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
         }
 
         repository.save(entity);
-
+        log.info("Event ID: {} for user ID: {} updated", eventId, userId);
         return EventMapper.toResponse(entity);
     }
 }

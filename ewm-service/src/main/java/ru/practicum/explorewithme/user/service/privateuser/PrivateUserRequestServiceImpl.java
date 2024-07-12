@@ -1,7 +1,9 @@
 package ru.practicum.explorewithme.user.service.privateuser;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.repository.EventRepository;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PrivateUserRequestServiceImpl implements PrivateUserRequestService {
     private final RequestRepository repository;
     private final EventService eventService;
@@ -34,22 +37,27 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
 
     @Override
     public List<UserEventRequestDto> getEventRequests(Long userId, Long eventId) {
+        log.info("Fetching event requests for event ID: {} by user ID: {}", eventId, userId);
         checker.isEventExists(eventId);
         checker.isUserExist(userId);
         EventResponse event = eventService.getEvent(eventId);
         if (event.getInitiator().getId() == userId) {
             List<UserEventRequestEntity> eventRequestEntities = repository.findAllByEventId(eventId)
-                    .orElseThrow(() -> new NotExistException("Even does not have requests"));
-            return eventRequestEntities.stream()
+                    .orElseThrow(() -> new NotExistException("Event does not have requests"));
+            List<UserEventRequestDto> requests = eventRequestEntities.stream()
                     .map(UserEvenRequestMapper::toDto)
                     .collect(Collectors.toList());
+            log.info("Found {} requests for event ID: {}", requests.size(), eventId);
+            return requests;
         }
         return Collections.emptyList();
     }
 
     @Override
+    @Transactional
     public EventRequestStatusUpdateResult approveRequests(
             Long userId, Long eventId, ApproveRequestCriteria criteria) {
+        log.info("Approving requests for event ID: {} by user ID: {}", eventId, userId);
         checker.isUserExist(userId);
         EventEntity event = eventService.getEventEntity(eventId);
         if (event.getRequestModeration().equals(Boolean.FALSE)) {
@@ -76,7 +84,7 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
                 future.get();
             }
         } catch (Exception e) {
-
+            log.error("Error approving requests: {}", e.getMessage());
         } finally {
             executor.shutdown();
         }
@@ -90,23 +98,26 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
 
     @Override
     public List<UserEventRequestDto> getUserRequests(Long userId) {
+        log.info("Fetching user requests for user ID: {}", userId);
         boolean existsById = repository.existsById(userId);
         if (!existsById) {
             throw new NotExistException("User not exist");
         }
         List<UserEventRequestEntity> eventRequestEntities =
                 repository.findAllByRequesterId(userId);
-        return eventRequestEntities.stream()
+        List<UserEventRequestDto> requests = eventRequestEntities.stream()
                 .map(UserEvenRequestMapper::toDto)
                 .collect(Collectors.toList());
+        log.info("Found {} requests for user ID: {}", requests.size(), userId);
+        return requests;
     }
 
     @Override
     public UserEventRequestDto createRequest(Long userId, Long eventId) {
+        log.info("Creating request for event ID: {} by user ID: {}", eventId, userId);
         boolean existed = repository.existsByRequesterIdAndEventId(userId, eventId);
         if (existed) {
-            throw new AlreadyExistException("User already have request" +
-                    "for this event");
+            throw new AlreadyExistException("User already has a request for this event");
         }
         EventEntity entity = eventService.getEventEntity(eventId);
         UserEntity userEntity = adminUserService.findUserEntity(userId);
@@ -116,18 +127,21 @@ public class PrivateUserRequestServiceImpl implements PrivateUserRequestService 
                 .requester(userEntity)
                 .event(entity)
                 .build();
-        repository.save(eventRequestEntity);
-        return UserEvenRequestMapper.toDto(eventRequestEntity);
+        UserEventRequestEntity saved = repository.save(eventRequestEntity);
+        log.info("Request created with ID: {} for event ID: {} by user ID: {}", saved.getId(), eventId, userId);
+        return UserEvenRequestMapper.toDto(saved);
     }
 
     @Override
     public UserEventRequestDto cancelRequest(Long userId, Long requestId) {
+        log.info("Cancelling request ID: {} by user ID: {}", requestId, userId);
         checker.isUserExist(userId);
         checker.isRequestExists(requestId);
         UserEventRequestEntity entity = repository.findByIdAndRequesterId(requestId, userId)
-                .orElseThrow(() -> new NotExistException("Request does not found"));
+                .orElseThrow(() -> new NotExistException("Request not found"));
         entity.setStatus("CANCELED");
         repository.delete(entity);
+        log.info("Request ID: {} cancelled by user ID: {}", requestId, userId);
         return UserEvenRequestMapper.toDto(entity);
     }
 

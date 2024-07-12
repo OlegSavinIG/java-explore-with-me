@@ -3,6 +3,7 @@ package ru.practicum.explorewithme.user.service.admin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.compilation.model.CompilationEntity;
 import ru.practicum.explorewithme.compilation.model.CompilationMapper;
 import ru.practicum.explorewithme.compilation.model.CompilationRequest;
@@ -23,6 +24,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     private final EventService eventService;
 
     @Override
+    @Transactional
     public CompilationResponse createCompilation(CompilationRequest request) {
         log.info("Creating compilation with title: {}", request.getTitle());
         CompilationEntity entity = repository.save(mapper.toEntity(request, eventService));
@@ -32,6 +34,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     }
 
     @Override
+    @Transactional
     public void deleteCompilationById(Integer compId) {
         log.info("Deleting compilation with id: {}", compId);
         boolean existsById = repository.existsById(compId);
@@ -44,6 +47,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationResponse updateCompilation(CompilationRequest request, Integer compId) {
         log.info("Updating compilation with id: {}", compId);
         CompilationEntity entity = repository.findById(compId)

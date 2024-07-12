@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
 import ru.practicum.explorewithme.category.model.CategoryResponse;
 import ru.practicum.explorewithme.category.model.mapper.CategoryMapper;
@@ -22,6 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<CategoryResponse> getCategories(Integer from, Integer size) {
         log.info("Getting categories from index {} with size {}", from, size);
         Pageable pageable = PageRequest.of(from / size, size);
@@ -34,6 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CategoryResponse getCategory(Integer catId) {
         log.info("Getting category with ID {}", catId);
         CategoryEntity categoryEntity = repository.findById(catId)
@@ -44,6 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CategoryEntity getCategoryEntity(Integer catId) {
         log.info("Getting category entity with ID {}", catId);
         CategoryEntity categoryEntity = repository.findById(catId)

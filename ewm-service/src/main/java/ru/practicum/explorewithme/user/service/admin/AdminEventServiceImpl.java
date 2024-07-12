@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
 import ru.practicum.explorewithme.category.repository.CategoryRepository;
 import ru.practicum.explorewithme.event.model.EventEntity;
@@ -33,6 +34,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventResponse> getEvents(
             EventSearchCriteriaForAdmin criteria, Integer from, Integer size) {
         log.info("Fetching events with criteria: {}", criteria);
@@ -67,6 +69,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     }
 
     @Override
+    @Transactional
     public EventResponse approveEvent(EventRequest request, Long eventId) {
         log.info("Approving event with id: {}", eventId);
         EventEntity event = eventRepository.findById(eventId)

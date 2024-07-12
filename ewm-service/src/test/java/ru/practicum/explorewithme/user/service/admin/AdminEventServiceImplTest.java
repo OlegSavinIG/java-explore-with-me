@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
+import ru.practicum.explorewithme.category.model.CategoryResponse;
+import ru.practicum.explorewithme.category.model.mapper.CategoryMapper;
 import ru.practicum.explorewithme.category.repository.CategoryRepository;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventRequest;
@@ -50,9 +52,14 @@ public class AdminEventServiceImplTest {
     private EventEntity eventEntity;
     private EventResponse eventResponse;
     private EventSearchCriteriaForAdmin criteria;
+    private CategoryEntity categoryEntity;
+    private UserEntity userEntity;
 
     @BeforeEach
     void setUp() {
+        categoryEntity = CategoryEntity.builder().id(1).name("Test Category").build();
+        userEntity = UserEntity.builder().id(1L).name("Test User").build();
+
         eventRequest = EventRequest.builder()
                 .annotation("Test Annotation")
                 .description("Test Description")
@@ -75,6 +82,8 @@ public class AdminEventServiceImplTest {
                 .participantLimit(100)
                 .requestModeration(true)
                 .state("PENDING")
+                .category(categoryEntity)
+                .initiator(userEntity)
                 .build();
 
         eventResponse = EventResponse.builder()
@@ -87,6 +96,8 @@ public class AdminEventServiceImplTest {
                 .participantLimit(100)
                 .requestModeration(true)
                 .state(EventStatus.PUBLISHED)
+                .category(CategoryMapper.toResponse(categoryEntity))
+                .initiator(UserMapper.toResponseWithEvent(userEntity))
                 .build();
 
         criteria = new EventSearchCriteriaForAdmin();
@@ -114,7 +125,7 @@ public class AdminEventServiceImplTest {
     void testApproveEvent() {
         when(eventRepository.findById(anyLong())).thenReturn(Optional.of(eventEntity));
         when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
-        when(categoryRepository.findById(anyInt())).thenReturn(Optional.of(new CategoryEntity()));
+        when(categoryRepository.findById(anyInt())).thenReturn(Optional.of(categoryEntity));
 
         EventResponse response = service.approveEvent(eventRequest, 1L);
 

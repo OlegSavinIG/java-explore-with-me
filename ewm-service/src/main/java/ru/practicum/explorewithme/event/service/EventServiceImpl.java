@@ -1,12 +1,14 @@
 package ru.practicum.explorewithme.event.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventResponse;
 import ru.practicum.explorewithme.event.model.EventResponseShort;
@@ -22,18 +24,20 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EventServiceImpl implements EventService {
     private final EventRepository repository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventResponseShort> getEvents(EventSearchCriteria criteria, Integer from, Integer size) {
+        log.info("Fetching events with criteria: {}, from: {}, size: {}", criteria, from, size);
         Specification<EventEntity> spec = Specification.where(null);
 
         if (criteria.getCategories() != null && !criteria.getCategories().isEmpty()) {
             spec = spec.and(EventSpecification.hasCategories(criteria.getCategories()));
         }
         spec = spec.and(EventSpecification.dateAfter(criteria.getRangeStart()));
-
         spec = spec.and(EventSpecification.dateBefore(criteria.getRangeEnd()));
         if (criteria.getText() != null && !criteria.getText().isEmpty()) {
             spec = spec.and(EventSpecification.containsText(criteria.getText()));
@@ -53,36 +57,54 @@ public class EventServiceImpl implements EventService {
         }
         Pageable pageable = PageRequest.of(from / size, size, sort);
         Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
-        return eventEntities.stream()
+        List<EventResponseShort> responses = eventEntities.stream()
                 .map(EventMapper::toResponseShort)
                 .collect(Collectors.toList());
+        log.info("Found {} events with criteria: {}, from: {}, size: {}", responses.size(), criteria, from, size);
+        return responses;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventResponse getEvent(Long id) {
+        log.info("Fetching event with ID: {}", id);
         EventEntity eventEntity = repository.findById(id)
                 .orElseThrow(() -> new NotExistException("This event does not exist"));
+        log.info("Found event with ID: {}", id);
         return EventMapper.toResponse(eventEntity);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventResponse> getEventsByIds(List<Long> ids) {
+        log.info("Fetching events with IDs: {}", ids);
         List<EventEntity> eventEntities = repository.findAllById(ids);
         if (eventEntities.isEmpty()) {
+            log.warn("No events found with IDs: {}", ids);
             return Collections.emptyList();
         }
-        return eventEntities.stream()
+        List<EventResponse> responses = eventEntities.stream()
                 .map(EventMapper::toResponse)
                 .collect(Collectors.toList());
+        log.info("Found {} events with IDs: {}", responses.size(), ids);
+        return responses;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventEntity getEventEntity(Long id) {
-        return repository.findById(id)
+        log.info("Fetching event entity with ID: {}", id);
+        EventEntity eventEntity = repository.findById(id)
                 .orElseThrow(() -> new NotExistException("Event does not exist"));
+        log.info("Found event entity with ID: {}", id);
+        return eventEntity;
     }
 
+    @Transactional(readOnly = true)
     public List<EventEntity> getEventEntities(List<Long> ids) {
-        return repository.findAllById(ids);
+        log.info("Fetching event entities with IDs: {}", ids);
+        List<EventEntity> eventEntities = repository.findAllById(ids);
+        log.info("Found {} event entities with IDs: {}", eventEntities.size(), ids);
+        return eventEntities;
     }
 }

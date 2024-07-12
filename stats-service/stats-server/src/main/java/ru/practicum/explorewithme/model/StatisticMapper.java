@@ -1,6 +1,5 @@
-package ru.practicum.explorewithme.mapper;
+package ru.practicum.explorewithme.model;
 
-import ru.practicum.explorewithme.StatisticEntity;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 
@@ -9,10 +8,6 @@ import ru.practicum.explorewithme.StatisticResponse;
  */
 //@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StatisticMapper {
-    private StatisticMapper() {
-        throw new UnsupportedOperationException("This is a utility "
-                + "class and cannot be instantiated");
-    }
 
     /**
      * Converts a StatisticRequest to a StatisticEntity.
