@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import ru.practicum.explorewithme.StatisticResponse;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -20,6 +24,16 @@ public class EventClient {
         Map<String, String> requestData = new HashMap<>();
         requestData.put("remoteAddr", remoteAddr);
         requestData.put("requestURI", requestURI);
-        restTemplate.postForObject(statsServerUrl + "/receive-data", requestData, Void.class);
+        restTemplate.postForObject(statsServerUrl + "/hit", requestData, Void.class);
+    }
+
+    public int getEventViews(Long eventId) {
+        String url = String.format("%s/stats?start=%s&end=%s&uris=/events/%d",
+                statsServerUrl,
+                LocalDateTime.now().minusYears(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                eventId);
+        List<StatisticResponse> response = List.of(restTemplate.getForObject(url, StatisticResponse[].class));
+        return response.size();
     }
 }

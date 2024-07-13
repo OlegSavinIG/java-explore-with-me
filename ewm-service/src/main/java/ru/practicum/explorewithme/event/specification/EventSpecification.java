@@ -2,7 +2,9 @@ package ru.practicum.explorewithme.event.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import ru.practicum.explorewithme.event.model.EventEntity;
+import ru.practicum.explorewithme.event.model.EventStatus;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,4 +58,14 @@ public class EventSpecification {
     public static Specification<EventEntity> isPaid(Boolean paid) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("paid"), paid);
     }
+    public static Specification<EventEntity> excludeStatuses(EventStatus... statuses) {
+        return (root, query, criteriaBuilder) -> {
+            CriteriaBuilder.In<EventStatus> inClause = criteriaBuilder.in(root.get("state"));
+            for (EventStatus status : statuses) {
+                inClause.value(status);
+            }
+            return criteriaBuilder.not(inClause);
+        };
+    }
+
 }

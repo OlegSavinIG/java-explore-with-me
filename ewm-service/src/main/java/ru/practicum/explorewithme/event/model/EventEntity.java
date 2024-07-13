@@ -37,7 +37,8 @@ public class EventEntity {
     private int confirmedRequests;
     private int participantLimit;
     private Boolean requestModeration;
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private EventStatus state;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;

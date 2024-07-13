@@ -9,10 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.explorewithme.event.model.EventEntity;
-import ru.practicum.explorewithme.event.model.EventResponse;
-import ru.practicum.explorewithme.event.model.EventResponseShort;
-import ru.practicum.explorewithme.event.model.EventSearchCriteria;
+import ru.practicum.explorewithme.event.client.EventClient;
+import ru.practicum.explorewithme.event.model.*;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.event.specification.EventSpecification;
@@ -27,6 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EventServiceImpl implements EventService {
     private final EventRepository repository;
+    private final EventClient eventClient;
 
     @Override
     @Transactional(readOnly = true)
@@ -48,6 +47,8 @@ public class EventServiceImpl implements EventService {
         if (criteria.getPaid() != null) {
             spec = spec.and(EventSpecification.isPaid(criteria.getPaid()));
         }
+        spec = spec.and(EventSpecification.excludeStatuses(EventStatus.WAITING, EventStatus.REJECTED));
+
         Sort sort = Sort.unsorted();
         if ("EVENT_DATE".equalsIgnoreCase(criteria.getSort())) {
             sort = Sort.by(Sort.Direction.ASC, "eventDate");
@@ -55,7 +56,9 @@ public class EventServiceImpl implements EventService {
         if ("VIEWS".equalsIgnoreCase(criteria.getSort())) {
             sort = Sort.by(Sort.Direction.DESC, "views");
         }
+
         Pageable pageable = PageRequest.of(from / size, size, sort);
+
         Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
         List<EventResponseShort> responses = eventEntities.stream()
                 .map(EventMapper::toResponseShort)
@@ -71,6 +74,8 @@ public class EventServiceImpl implements EventService {
         EventEntity eventEntity = repository.findById(id)
                 .orElseThrow(() -> new NotExistException("This event does not exist"));
         log.info("Found event with ID: {}", id);
+        int views = eventClient.getEventViews(id);
+        eventEntity.setViews(views);
         return EventMapper.toResponse(eventEntity);
     }
 
