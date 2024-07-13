@@ -18,6 +18,10 @@ import ru.practicum.explorewithme.exception.NotExistException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,12 +64,30 @@ public class EventServiceImpl implements EventService {
         Pageable pageable = PageRequest.of(from / size, size, sort);
 
         Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
-        List<EventResponseShort> responses = eventEntities.stream()
+        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+        List<CompletableFuture<EventEntity>> futures = eventEntities.stream()
+                .map(event -> CompletableFuture.supplyAsync(() ->
+                {
+                    try {
+                        Integer views = eventClient.getEventViews(event.getId()).get();
+                        event.setViews(views);
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return event;
+                }, executor))
+                .collect(Collectors.toList());
+        List<EventResponseShort> responses = futures.stream()
+                .map(CompletableFuture::join)
                 .map(EventMapper::toResponseShort)
                 .collect(Collectors.toList());
         log.info("Found {} events with criteria: {}, from: {}, size: {}", responses.size(), criteria, from, size);
         return responses;
     }
+//        List<EventResponseShort> responses = eventEntities.stream()
+//                .map(EventMapper::toResponseShort)
+//                .collect(Collectors.toList());
+
 
     @Override
     @Transactional(readOnly = true)
@@ -74,8 +96,14 @@ public class EventServiceImpl implements EventService {
         EventEntity eventEntity = repository.findById(id)
                 .orElseThrow(() -> new NotExistException("This event does not exist"));
         log.info("Found event with ID: {}", id);
-        int views = eventClient.getEventViews(id);
-        eventEntity.setViews(views);
+        CompletableFuture<Integer> eventViews = eventClient.getEventViews(id);
+        try {
+            Integer views = eventViews.get();
+            eventEntity.setViews(views);
+        } catch (InterruptedException | ExecutionException e) {
+            log.info("Error fetching event views", e);
+            throw new RuntimeException(e);
+        }
         return EventMapper.toResponse(eventEntity);
     }
 
