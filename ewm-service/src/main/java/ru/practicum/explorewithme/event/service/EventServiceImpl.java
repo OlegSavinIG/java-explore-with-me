@@ -64,7 +64,9 @@ public class EventServiceImpl implements EventService {
         Pageable pageable = PageRequest.of(from / size, size, sort);
 
         Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
+
         List<CompletableFuture<EventEntity>> futures = setEvensViews(eventEntities);
+
         List<EventResponseShort> responses = futures.stream()
                 .map(CompletableFuture::join)
                 .map(EventMapper::toResponseShort)
