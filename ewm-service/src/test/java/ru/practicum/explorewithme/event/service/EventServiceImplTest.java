@@ -11,10 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
-import ru.practicum.explorewithme.event.model.EventEntity;
-import ru.practicum.explorewithme.event.model.EventResponse;
-import ru.practicum.explorewithme.event.model.EventResponseShort;
-import ru.practicum.explorewithme.event.model.EventSearchCriteria;
+import ru.practicum.explorewithme.event.client.EventClient;
+import ru.practicum.explorewithme.event.model.*;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.exception.NotExistException;
@@ -24,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,6 +34,9 @@ class EventServiceImplTest {
 
     @Mock
     private EventRepository repository;
+
+    @Mock
+    private EventClient eventClient;
 
     @InjectMocks
     private EventServiceImpl service;
@@ -50,7 +52,7 @@ class EventServiceImplTest {
     void setUp() {
         userEntity = UserEntity.builder()
                 .name("Name User")
-                .id(1l)
+                .id(1L)
                 .build();
         category = CategoryEntity.builder()
                 .id(1)
@@ -63,13 +65,14 @@ class EventServiceImplTest {
                 .annotation("Test Annotation")
                 .description("Test Description")
                 .eventDate(LocalDateTime.now().plusDays(1))
-                .state("PENDING")
+                .state(EventStatus.PENDING)
                 .category(category)
                 .initiator(userEntity)
                 .build();
 
         eventResponse = EventMapper.toResponse(eventEntity);
         eventResponseShort = EventMapper.toResponseShort(eventEntity);
+        eventResponseShort.setViews(100);  // Устанавливаем просмотры для теста
 
         criteria = new EventSearchCriteria();
         criteria.setCategories(Collections.singletonList(1));
@@ -81,26 +84,31 @@ class EventServiceImplTest {
     void getEvents() {
         Page<EventEntity> page = new PageImpl<>(Collections.singletonList(eventEntity));
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
+        when(eventClient.getEventViews(anyLong())).thenReturn(CompletableFuture.completedFuture(100));
 
         List<EventResponseShort> responses = service.getEvents(criteria, 0, 10);
 
         assertNotNull(responses);
         assertEquals(1, responses.size());
         assertEquals(eventResponseShort, responses.get(0));
+        assertEquals(100, responses.get(0).getViews());
 
         verify(repository, times(1)).findAll(any(Specification.class), any(Pageable.class));
+        verify(eventClient, times(1)).getEventViews(anyLong());
     }
 
     @Test
     void getEvent() {
         when(repository.findById(anyLong())).thenReturn(Optional.of(eventEntity));
+        when(eventClient.getEventViews(anyLong())).thenReturn(CompletableFuture.completedFuture(100));
 
         EventResponse response = service.getEvent(1L);
 
         assertNotNull(response);
-        assertEquals(eventResponse, response);
+        assertEquals(100, response.getViews());
 
         verify(repository, times(1)).findById(anyLong());
+        verify(eventClient, times(1)).getEventViews(anyLong());
     }
 
     @Test
