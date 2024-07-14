@@ -14,6 +14,7 @@ import ru.practicum.explorewithme.category.service.CategoryService;
 import ru.practicum.explorewithme.event.model.EventEntity;
 import ru.practicum.explorewithme.event.model.EventRequest;
 import ru.practicum.explorewithme.event.model.EventResponse;
+import ru.practicum.explorewithme.event.model.EventStatus;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.exception.NotExistException;
@@ -104,7 +105,7 @@ public class PrivateUserEventsServiceImpl implements PrivateUserEventsService {
             entity.setRequestModeration(request.getRequestModeration());
         }
         if (request.getStateAction() != null) {
-            entity.setState(request.getStateAction());
+            entity.setState(EventStatus.valueOf(request.getStateAction()));
         }
         if (request.getCategory() != null) {
             CategoryEntity category = categoryService.getCategoryEntity(request.getCategory());

@@ -58,6 +58,7 @@ public class EventSpecification {
     public static Specification<EventEntity> isPaid(Boolean paid) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("paid"), paid);
     }
+
     public static Specification<EventEntity> excludeStatuses(EventStatus... statuses) {
         return (root, query, criteriaBuilder) -> {
             CriteriaBuilder.In<EventStatus> inClause = criteriaBuilder.in(root.get("state"));

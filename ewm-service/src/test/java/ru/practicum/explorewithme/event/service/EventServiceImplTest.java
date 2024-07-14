@@ -11,10 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import ru.practicum.explorewithme.category.model.CategoryEntity;
-import ru.practicum.explorewithme.event.model.EventEntity;
-import ru.practicum.explorewithme.event.model.EventResponse;
-import ru.practicum.explorewithme.event.model.EventResponseShort;
-import ru.practicum.explorewithme.event.model.EventSearchCriteria;
+import ru.practicum.explorewithme.event.model.*;
 import ru.practicum.explorewithme.event.model.mapper.EventMapper;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.exception.NotExistException;
@@ -63,7 +60,7 @@ class EventServiceImplTest {
                 .annotation("Test Annotation")
                 .description("Test Description")
                 .eventDate(LocalDateTime.now().plusDays(1))
-                .state("PENDING")
+                .state(EventStatus.PENDING)
                 .category(category)
                 .initiator(userEntity)
                 .build();

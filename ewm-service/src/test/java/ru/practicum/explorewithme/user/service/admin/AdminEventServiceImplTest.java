@@ -80,7 +80,7 @@ public class AdminEventServiceImplTest {
                 .paid(true)
                 .participantLimit(100)
                 .requestModeration(true)
-                .state("PENDING")
+                .state(EventStatus.PENDING)
                 .category(categoryEntity)
                 .initiator(userEntity)
                 .build();

@@ -64,7 +64,7 @@ public class EventServiceImpl implements EventService {
         Pageable pageable = PageRequest.of(from / size, size, sort);
 
         Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
-        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+        ExecutorService executor = Executors.newFixedThreadPool(10);
         List<CompletableFuture<EventEntity>> futures = eventEntities.stream()
                 .map(event -> CompletableFuture.supplyAsync(() ->
                 {
@@ -84,9 +84,6 @@ public class EventServiceImpl implements EventService {
         log.info("Found {} events with criteria: {}, from: {}, size: {}", responses.size(), criteria, from, size);
         return responses;
     }
-//        List<EventResponseShort> responses = eventEntities.stream()
-//                .map(EventMapper::toResponseShort)
-//                .collect(Collectors.toList());
 
 
     @Override
