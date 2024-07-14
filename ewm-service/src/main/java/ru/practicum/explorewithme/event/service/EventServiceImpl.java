@@ -64,19 +64,7 @@ public class EventServiceImpl implements EventService {
         Pageable pageable = PageRequest.of(from / size, size, sort);
 
         Page<EventEntity> eventEntities = repository.findAll(spec, pageable);
-        ExecutorService executor = Executors.newFixedThreadPool(10);
-        List<CompletableFuture<EventEntity>> futures = eventEntities.stream()
-                .map(event -> CompletableFuture.supplyAsync(() ->
-                {
-                    try {
-                        Integer views = eventClient.getEventViews(event.getId()).get();
-                        event.setViews(views);
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new RuntimeException(e);
-                    }
-                    return event;
-                }, executor))
-                .collect(Collectors.toList());
+        List<CompletableFuture<EventEntity>> futures = setEvensViews(eventEntities);
         List<EventResponseShort> responses = futures.stream()
                 .map(CompletableFuture::join)
                 .map(EventMapper::toResponseShort)
@@ -136,5 +124,23 @@ public class EventServiceImpl implements EventService {
         List<EventEntity> eventEntities = repository.findAllById(ids);
         log.info("Found {} event entities with IDs: {}", eventEntities.size(), ids);
         return eventEntities;
+    }
+
+    private List<CompletableFuture<EventEntity>> setEvensViews(Page<EventEntity> eventEntities) {
+        int numCores = Runtime.getRuntime().availableProcessors();
+        int numThreads = numCores * 2;
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+        return eventEntities.stream()
+                .map(event -> CompletableFuture.supplyAsync(() ->
+                {
+                    try {
+                        Integer views = eventClient.getEventViews(event.getId()).get();
+                        event.setViews(views);
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return event;
+                }, executor))
+                .collect(Collectors.toList());
     }
 }
