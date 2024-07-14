@@ -54,7 +54,7 @@ services:
       STATS_SERVER_URL: http://stats-server:8081  # URL для использования в RestTemplate
     depends_on:
       - postgres-main
-      - stats-server  # Обеспечить, что stats-server запущен перед ewm-service
+      - stats-server
     ports:
       - "9090:9090"
 
