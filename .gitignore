@@ -1,6 +1,3 @@
-# Ignore specific files
-checkstyle.xml
-
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
