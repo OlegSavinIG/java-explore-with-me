@@ -19,4 +19,6 @@ public interface AdminUserService {
     UserResponse findById(Long userId);
 
     UserEntity findUserEntity(Long userId);
+
+    void saveUser(UserEntity entity);
 }

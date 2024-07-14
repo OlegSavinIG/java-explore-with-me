@@ -11,7 +11,7 @@ import ru.practicum.explorewithme.event.service.EventService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {EventMapper.class})
 public interface CompilationMapper {
 
     @Mapping(target = "events", expression = "java(mapIdsToEvents(request.getEvents(), eventService))")

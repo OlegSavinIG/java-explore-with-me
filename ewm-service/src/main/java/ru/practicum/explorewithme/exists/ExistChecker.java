@@ -6,6 +6,7 @@ import ru.practicum.explorewithme.category.repository.CategoryRepository;
 import ru.practicum.explorewithme.compilation.repository.CompilationRepository;
 import ru.practicum.explorewithme.event.repository.EventRepository;
 import ru.practicum.explorewithme.exception.NotExistException;
+import ru.practicum.explorewithme.subscription.repository.SubscriptionRepository;
 import ru.practicum.explorewithme.user.repository.AdminUserRepository;
 import ru.practicum.explorewithme.user.repository.RequestRepository;
 
@@ -17,6 +18,7 @@ public class ExistChecker {
     private final CompilationRepository compilationRepository;
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
     public void isUserExist(Long userId) {
         boolean existsById = adminUserRepository.existsById(userId);
@@ -50,6 +52,13 @@ public class ExistChecker {
         boolean existsById = requestRepository.existsById(reqId);
         if (!existsById) {
             throw new NotExistException("Request not exists");
+        }
+    }
+
+    public void isSubscriptionExists(Long subscriptionId) {
+        boolean existsById = subscriptionRepository.existsById(subscriptionId);
+        if (!existsById) {
+            throw new NotExistException("Subscription not exists");
         }
     }
 }
