@@ -1,17 +1,11 @@
--- Schema for UserEntity
-CREATE TABLE IF NOT EXISTS users (
+-- Schema for table: compilations
+CREATE TABLE IF NOT EXISTS compilations (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL
+    title VARCHAR(255) NOT NULL,
+    pinned BOOLEAN
 );
 
--- Schema for CategoryEntity
-CREATE TABLE IF NOT EXISTS categories (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
--- Schema for EventEntity
+-- Schema for table: events
 CREATE TABLE IF NOT EXISTS events (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -21,40 +15,65 @@ CREATE TABLE IF NOT EXISTS events (
     event_date TIMESTAMP NOT NULL,
     published_on TIMESTAMP,
     paid BOOLEAN NOT NULL,
-    views INT NOT NULL,
-    confirmed_requests INT NOT NULL,
-    participant_limit INT NOT NULL,
+    views INTEGER,
+    confirmed_requests INTEGER,
+    participant_limit INTEGER,
     request_moderation BOOLEAN,
-    state VARCHAR(50),
-    category_id INT,
-    user_id INT,
-    FOREIGN KEY (category_id) REFERENCES categories(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    state VARCHAR(255),
+    category_id INTEGER,
+    user_id INTEGER,
+    CONSTRAINT fk_category FOREIGN KEY(category_id) REFERENCES categories(id),
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
--- Schema for UserEventRequestEntity
+-- Schema for table: subscriptions
+CREATE TABLE IF NOT EXISTS subscriptions (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    subscriber_id INTEGER,
+    status VARCHAR(255),
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_subscriber FOREIGN KEY(subscriber_id) REFERENCES users(id)
+);
+
+-- Schema for table: users
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL
+);
+
+-- Schema for table: user_friends (join table for users' friends)
+CREATE TABLE IF NOT EXISTS user_friends (
+    user_id INTEGER,
+    friend_id INTEGER,
+    PRIMARY KEY(user_id, friend_id),
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT fk_friend FOREIGN KEY(friend_id) REFERENCES users(id)
+);
+
+-- Schema for table: requests
 CREATE TABLE IF NOT EXISTS requests (
     id SERIAL PRIMARY KEY,
     created TIMESTAMP NOT NULL,
-    event_id INT NOT NULL,
-    user_id INT NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    FOREIGN KEY (event_id) REFERENCES events(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    event_id INTEGER,
+    user_id INTEGER,
+    status VARCHAR(255),
+    CONSTRAINT fk_event FOREIGN KEY(event_id) REFERENCES events(id),
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
--- Schema for CompilationEntity
-CREATE TABLE IF NOT EXISTS compilations (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    pinned BOOLEAN NOT NULL
-);
-
--- Join table for CompilationEntity and EventEntity many-to-many relationship
+-- Schema for join table: compilation_events
 CREATE TABLE IF NOT EXISTS compilation_events (
-    compilation_id INT NOT NULL,
-    event_id INT NOT NULL,
-    PRIMARY KEY (compilation_id, event_id),
-    FOREIGN KEY (compilation_id) REFERENCES compilations(id),
-    FOREIGN KEY (event_id) REFERENCES events(id)
+    compilation_id INTEGER,
+    event_id INTEGER,
+    PRIMARY KEY(compilation_id, event_id),
+    CONSTRAINT fk_compilation FOREIGN KEY(compilation_id) REFERENCES compilations(id),
+    CONSTRAINT fk_event FOREIGN KEY(event_id) REFERENCES events(id)
+);
+
+-- Schema for table: categories
+CREATE TABLE IF NOT EXISTS categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
 );
