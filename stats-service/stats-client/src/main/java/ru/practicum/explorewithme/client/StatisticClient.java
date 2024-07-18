@@ -18,9 +18,16 @@ public class StatisticClient {
 
     private final RestTemplate restTemplate;
 
+    /**
+     * Sends a list of statistics to an external service.
+     *
+     * @param statistics the list of statistics to be sent
+     */
     public void sendStatistics(List<StatisticResponse> statistics) {
         try {
-            restTemplate.postForObject("/external-service-endpoint", statistics, Void.class);
+            restTemplate.postForObject(
+                    "/external-service-endpoint", statistics, Void.class
+            );
             log.info("Successfully sent statistics to external service");
         } catch (Exception e) {
             log.error("Failed to send statistics to external service", e);

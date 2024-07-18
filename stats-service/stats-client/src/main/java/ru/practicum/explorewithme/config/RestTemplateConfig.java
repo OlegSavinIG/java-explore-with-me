@@ -20,10 +20,16 @@ public class RestTemplateConfig {
     @Value("${server.url}")
     private String serverUrl;
 
-
+    /**
+     * Creates and configures a RestTemplate bean.
+     *
+     * @param builder the RestTemplateBuilder
+     * @return the configured RestTemplate
+     */
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        SimpleClientHttpRequestFactory factory =
+                new SimpleClientHttpRequestFactory();
 
         RestTemplate restTemplate = builder
                 .rootUri(serverUrl)
@@ -38,19 +44,39 @@ public class RestTemplateConfig {
         return restTemplate;
     }
 
+    /**
+     * Creates an interceptor for logging HTTP requests.
+     *
+     * @return the request logging interceptor
+     */
     private ClientHttpRequestInterceptor logRequest() {
         return (request, body, execution) -> {
-            System.out.println("Request: " + request.getMethod() + " " + request.getURI());
-            request.getHeaders().forEach((name, values) -> values.forEach(value -> System.out.println(name + ": " + value)));
+            System.out.println("Request: " + request.getMethod() + " " +
+                    request.getURI());
+            request.getHeaders().forEach((name, values) ->
+                    values.forEach(value ->
+                            System.out.println(name + ": " + value)
+                    )
+            );
             return execution.execute(request, body);
         };
     }
 
+    /**
+     * Creates an interceptor for logging HTTP responses.
+     *
+     * @return the response logging interceptor
+     */
     private ClientHttpRequestInterceptor logResponse() {
         return (request, body, execution) -> {
             var response = execution.execute(request, body);
-            System.out.println("Response Status: " + response.getStatusCode());
-            response.getHeaders().forEach((name, values) -> values.forEach(value -> System.out.println(name + ": " + value)));
+            System.out.println("Response Status: " +
+                    response.getStatusCode());
+            response.getHeaders().forEach((name, values) ->
+                    values.forEach(value ->
+                            System.out.println(name + ": " + value)
+                    )
+            );
             return response;
         };
     }
