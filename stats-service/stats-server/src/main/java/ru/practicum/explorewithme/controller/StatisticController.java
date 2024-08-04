@@ -2,8 +2,14 @@ package ru.practicum.explorewithme.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 import ru.practicum.explorewithme.exception.WrongTimeException;
@@ -21,29 +27,32 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class StatisticController {
+    /**
+     * REST service for managing statistics.
+     */
     private final StatisticService service;
 
     /**
-     * Saves a statistic.
+     * Saves statistical data.
      *
-     * @param request the statistic request to be saved
+     * @param request the statistic request containing data to be saved
+     * @return HttpStatus
      */
     @PostMapping("/hit")
-    public void saveStatistic(
-            @Valid @RequestBody final StatisticRequest request
-    ) {
+    public ResponseEntity saveStatistic(@Valid @RequestBody
+                                  final StatisticRequest request) {
         service.saveStatistic(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
-     * Retrieves statistics within the specified time range.
+     * Retrieves statistics based on query parameters.
      *
-     * @param start  the start date and time of the range
-     * @param end    the end date and time of the range
+     * @param start  the start date and time for the statistics
+     * @param end    the end date and time for the statistics
      * @param uris   the list of URIs to filter the statistics
-     * @param unique whether to count only unique hits
-     * @return the list of retrieved statistics
-     * @throws WrongTimeException if the start time is not before the end time
+     * @param unique whether to consider only unique hits
+     * @return the list of statistic responses
      */
     @GetMapping("/stats")
     public List<StatisticResponse> getStatistic(
@@ -56,12 +65,10 @@ public class StatisticController {
             @RequestParam(value = "uris", required = false)
             final List<String> uris,
             @RequestParam(value = "unique", defaultValue = "false")
-            final boolean unique
-    ) {
+            final boolean unique) {
         if (!start.isBefore(end)) {
             throw new WrongTimeException(
-                    "Начало эвента должно быть раньше конца"
-            );
+                    "Start time must be before end time");
         }
         return service.getStatistic(start, end, uris, unique);
     }

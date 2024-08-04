@@ -16,7 +16,9 @@ import java.util.List;
  */
 @Configuration
 public class RestTemplateConfig {
-
+    /**
+     * Server address for RestTemplate.
+     */
     @Value("${server.url}")
     private String serverUrl;
 
@@ -27,7 +29,7 @@ public class RestTemplateConfig {
      * @return the configured RestTemplate
      */
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+    public RestTemplate restTemplate(final RestTemplateBuilder builder) {
         SimpleClientHttpRequestFactory factory =
                 new SimpleClientHttpRequestFactory();
 
@@ -36,7 +38,8 @@ public class RestTemplateConfig {
                 .build();
         restTemplate.setRequestFactory(factory);
 
-        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
+        List<ClientHttpRequestInterceptor> interceptors =
+                new ArrayList<>();
         interceptors.add(logRequest());
         interceptors.add(logResponse());
         restTemplate.setInterceptors(interceptors);
@@ -45,38 +48,34 @@ public class RestTemplateConfig {
     }
 
     /**
-     * Creates an interceptor for logging HTTP requests.
+     * Interceptor for logging HTTP requests.
      *
-     * @return the request logging interceptor
+     * @return the interceptor
      */
     private ClientHttpRequestInterceptor logRequest() {
         return (request, body, execution) -> {
-            System.out.println("Request: " + request.getMethod() + " " +
-                    request.getURI());
+            System.out.println("Request: " + request.getMethod() + " "
+                    + request.getURI());
             request.getHeaders().forEach((name, values) ->
                     values.forEach(value ->
-                            System.out.println(name + ": " + value)
-                    )
-            );
+                            System.out.println(name + ": " + value)));
             return execution.execute(request, body);
         };
     }
 
     /**
-     * Creates an interceptor for logging HTTP responses.
+     * Interceptor for logging HTTP responses.
      *
-     * @return the response logging interceptor
+     * @return the interceptor
      */
     private ClientHttpRequestInterceptor logResponse() {
         return (request, body, execution) -> {
             var response = execution.execute(request, body);
-            System.out.println("Response Status: " +
-                    response.getStatusCode());
+            System.out.println("Response Status: "
+                    + response.getStatusCode());
             response.getHeaders().forEach((name, values) ->
                     values.forEach(value ->
-                            System.out.println(name + ": " + value)
-                    )
-            );
+                            System.out.println(name + ": " + value)));
             return response;
         };
     }

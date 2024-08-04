@@ -5,8 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
+
 
 /**
  * Entity representing a statistic record.
@@ -39,6 +46,12 @@ public class StatisticEntity {
      * The IP address of the client.
      */
     private String ip;
+
+    /**
+     * The hits of the uri.
+     */
+    @Transient
+    private Long hits;
 
     /**
      * The creation time of the statistic record.

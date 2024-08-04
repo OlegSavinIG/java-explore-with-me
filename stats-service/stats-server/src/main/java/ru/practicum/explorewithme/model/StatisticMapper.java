@@ -1,15 +1,14 @@
 package ru.practicum.explorewithme.model;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.StatisticRequest;
 import ru.practicum.explorewithme.StatisticResponse;
 
 /**
  * Mapper class for converting between StatisticEntity and DTOs.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatisticMapper {
+    protected StatisticMapper() {
+    }
 
     /**
      * Converts a StatisticRequest to a StatisticEntity.
@@ -36,9 +35,7 @@ public class StatisticMapper {
         return StatisticResponse.builder()
                 .app(entity.getApp())
                 .uri(entity.getUri())
-                .ip(entity.getIp())
-                .creationTime(entity.getCreationTime())
-                .id(entity.getId())
+                .hits(entity.getHits())
                 .build();
     }
 }
